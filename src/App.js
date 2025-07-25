@@ -89,8 +89,8 @@ function App() {
     <div style={{ background: '#f3f2ef', minHeight: '100vh', display: 'flex',
                   justifyContent: 'center', alignItems: 'center', padding: 24 }}>
       <Helmet>
-        <title>URL Shortener</title>
-        <meta name="description" content="긴 주소를 짧고 공유하기 쉽게 만들어보세요." />
+        <title>Linkedn Tips</title>
+        <meta name="description" content="긴 링크드인 주소를 짧고 공유하기 쉽게 만들어보세요." />
         <style>
           {`
             .btn-shorten:hover { background-color: #ff4757 !important; }
@@ -107,4 +107,75 @@ function App() {
                     maxWidth: 500, width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
           {/* 2. 여기서 <Linkedin ... /> 컴포넌트 라인을 삭제했습니다. */}
-          <h1 style={{ fontSize: 20, fontWeight
+          <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>
+            Linkedn Tips
+          </h1>
+        </div>
+        <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
+          긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
+        </p>
+        <input type="text" placeholder="여기에 긴 URL을 붙여넣으세요"
+          value={originalLink} onChange={e => setOriginalLink(e.target.value)}
+          style={{ width: '100%', padding: 12, marginBottom: 12,
+                   border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
+        
+        <button
+          className="btn-shorten"
+          onClick={handleShorten}
+          style={{ width: '100%', padding: 12, background: '#0a66c2',
+                   color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
+                   cursor: 'pointer' }}>
+          단축 링크 만들기
+        </button>
+
+        {shortUrl && (
+          <div style={{ marginTop: 24 }}>
+            <div style={{ padding: 16, border: '1px solid #cce0ff',
+                          borderRadius: 8, display: 'flex', alignItems: 'center',
+                          justifyContent: 'space-between' }}>
+              <a href={shortUrl} target="_blank" rel="noreferrer"
+                style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>
+                {shortUrl}
+              </a>
+              <button
+                className="btn-copy"
+                onClick={handleCopy}
+                style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none',
+                         cursor: 'pointer' }}>
+                복사
+              </button>
+            </div>
+            <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <button
+                className="btn-kakao"
+                onClick={shareKakao}
+                style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
+                카카오톡 공유
+              </button>
+              <a
+                className="btn-linkedin"
+                href={shareUrls.linkedin} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
+                LinkedIn
+              </a>
+              <a
+                className="btn-twitter"
+                href={shareUrls.twitter} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>
+                Twitter
+              </a>
+              <a
+                className="btn-threads"
+                href={shareUrls.threads} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>
+                Threads
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default App;
