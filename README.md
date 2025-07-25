@@ -6,7 +6,7 @@
 - UGC 및 activity 형식 링크 자동 추출 및 정리
 - 복사 버튼으로 빠른 링크 복사
 - 소셜 공유 버튼 (카카오톡, Facebook, LinkedIn, Twitter, Threads)
-- SEO 및 오픈그래프 메타태그 포함
+- SEO 및 Open Graph 메타태그 포함
 - Kakao Developers JavaScript SDK 통합
 
 ## 설치 및 실행

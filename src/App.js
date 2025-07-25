@@ -54,14 +54,21 @@ function App() {
     threads: `https://www.threads.net/intent/post?url=${encodeURIComponent(cleanLink)}`
   };
 
-  const shareBtnStyle = {
-    padding: '6px 10px',
+  const shareBtnBase = {
+    padding: '6px 12px',
     fontSize: 12,
-    background: '#f3f3f3',
     borderRadius: 6,
     textDecoration: 'none',
-    color: '#333',
-    border: '1px solid #ddd'
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer'
+  };
+
+  const shareBtnStyles = {
+    facebook: { background: '#4267B2' },
+    linkedin: { background: '#0A66C2' },
+    twitter: { background: '#1DA1F2' },
+    threads: { background: '#10141A' }
   };
 
   return (
@@ -78,34 +85,32 @@ function App() {
           <Linkedin color="#0a66c2" size={28} />
           <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>LinkedIn 링크 클리너</h1>
         </div>
-        <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
-          지저분한 공유 링크를 깔끔하게 바꿔보세요.
-        </p>
-        <input type="text" placeholder="여기에 LinkedIn 공유 링크를 붙여넣으세요" value={originalLink}
+        <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>지저분한 공유 링크를 깔끔하게 바꿔보세요.</p>
+        <input
+          type="text"
+          placeholder="여기에 LinkedIn 공유 링크를 붙여넣으세요"
+          value={originalLink}
           onChange={(e) => setOriginalLink(e.target.value)}
-          style={{ width: '100%', padding: 12, marginBottom: 12, border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
-        <button onClick={handleConvert}
-          style={{ width: '100%', padding: 12, background: '#0a66c2', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600 }}>
+          style={{ width: '100%', padding: 12, marginBottom: 12, border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }}
+        />
+        <button
+          onClick={handleConvert}
+          style={{ width: '100%', padding: 12, background: '#0a66c2', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600 }}
+        >
           깔끔한 링크 만들기
         </button>
         {cleanLink && (
           <div style={{ marginTop: 24 }}>
             <div style={{ padding: 16, border: '1px solid #cce0ff', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <a href={cleanLink} target="_blank" rel="noreferrer"
-                style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>{cleanLink}</a>
-              <button onClick={handleCopy} style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none' }}>
-                복사
-              </button>
+              <a href={cleanLink} target="_blank" rel="noreferrer" style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>{cleanLink}</a>
+              <button onClick={handleCopy} style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none' }}>복사</button>
             </div>
             <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <button onClick={shareKakao}
-                style={{ padding: '6px 12px', background: '#fee500', color: '#191919', border: 'none', borderRadius: 6, fontWeight: 600 }}>
-                카카오톡 공유
-              </button>
-              <a href={shareUrls.facebook} target="_blank" rel="noreferrer" style={shareBtnStyle}>Facebook</a>
-              <a href={shareUrls.linkedin} target="_blank" rel="noreferrer" style={shareBtnStyle}>LinkedIn</a>
-              <a href={shareUrls.twitter} target="_blank" rel="noreferrer" style={shareBtnStyle}>Twitter</a>
-              <a href={shareUrls.threads} target="_blank" rel="noreferrer" style={shareBtnStyle}>Threads</a>
+              <button onClick={shareKakao} style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>카카오톡 공유</button>
+              <a href={shareUrls.facebook} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.facebook }}>Facebook</a>
+              <a href={shareUrls.linkedin} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>LinkedIn</a>
+              <a href={shareUrls.twitter} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>Twitter</a>
+              <a href={shareUrls.threads} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>Threads</a>
             </div>
           </div>
         )}
