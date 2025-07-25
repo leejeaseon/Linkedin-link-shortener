@@ -85,17 +85,23 @@ function App() {
   };
 
   return (
-    // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-    // 이 div의 background 속성을 그라데이션으로 변경합니다.
     <div style={{ background: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)', 
                   minHeight: '100vh', display: 'flex',
                   justifyContent: 'center', alignItems: 'center', padding: 24 }}>
-    {/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */}
       <Helmet>
         <title>Linkedn Tips</title>
-        <meta name="description" content="긴 링크드이 주소를 짧고 공유하기 쉽게 만들어보세요." />
+        <meta name="description" content="긴 링크드인 주소를 짧고 공유하기 쉽게 만들어보세요." />
         <style>
           {`
+            /* ▼▼▼▼▼ 브라우저 기본 여백을 제거하여 배경을 꽉 채웁니다 ▼▼▼▼▼ */
+            html, body {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
+            }
+            /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
             .btn-shorten:hover { background-color: #ff4757 !important; }
             .btn-copy:hover { background-color: #2f3542 !important; color: white !important; }
             .btn-kakao:hover { background-color: #fbe500 !important; filter: brightness(0.9); }
