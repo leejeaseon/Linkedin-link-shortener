@@ -55,9 +55,10 @@ function App() {
   // 카카오 공유 기능 등은 그대로 유지합니다. (필요에 따라 수정 가능)
   // App.js
   const shareKakao = () => {
-    if (!window.Kakao) return alert('카카오 SDK 로딩 실패');
-    window.Kakao.Link.sendScrap({
-      requestUrl: cleanLink,
+  if (!window.Kakao) return alert('카카오 SDK 로딩 실패');
+  window.Kakao.Link.sendScrap({
+    // 'cleanLink'를 'shortUrl'로 변경합니다.
+    requestUrl: shortUrl, 
   });
 };
 
