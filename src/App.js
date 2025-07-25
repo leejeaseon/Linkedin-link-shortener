@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Linkedin } from 'lucide-react';
+// 1. 여기서 { Linkedin } import를 제거했습니다.
 import { Helmet } from 'react-helmet';
 
 function App() {
@@ -89,10 +89,8 @@ function App() {
     <div style={{ background: '#f3f2ef', minHeight: '100vh', display: 'flex',
                   justifyContent: 'center', alignItems: 'center', padding: 24 }}>
       <Helmet>
-        <title>Linkedn tips</title>
+        <title>URL Shortener</title>
         <meta name="description" content="긴 주소를 짧고 공유하기 쉽게 만들어보세요." />
-        {/* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */}
-        {/* 1. 여기에 <style> 태그를 추가하여 호버 효과를 정의합니다. */}
         <style>
           {`
             .btn-shorten:hover { background-color: #ff4757 !important; }
@@ -103,84 +101,10 @@ function App() {
             .btn-threads:hover { background-color: #444444 !important; }
           `}
         </style>
-        {/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */}
       </Helmet>
       <div style={{ background: '#fff', borderRadius: 16,
                     boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: 32,
                     maxWidth: 500, width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-          <Linkedin color="#0a66c2" size={28} />
-          <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>
-            Linkedn tips
-          </h1>
-        </div>
-        <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
-          긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
-        </p>
-        <input type="text" placeholder="여기에 긴 URL을 붙여넣으세요"
-          value={originalLink} onChange={e => setOriginalLink(e.target.value)}
-          style={{ width: '100%', padding: 12, marginBottom: 12,
-                   border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
-        
-        {/* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */}
-        {/* 2. 각 버튼/링크에 className을 추가합니다. */}
-        <button
-          className="btn-shorten"
-          onClick={handleShorten}
-          style={{ width: '100%', padding: 12, background: '#0a66c2',
-                   color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
-                   cursor: 'pointer' }}>
-          단축 링크 만들기
-        </button>
-
-        {shortUrl && (
-          <div style={{ marginTop: 24 }}>
-            <div style={{ padding: 16, border: '1px solid #cce0ff',
-                          borderRadius: 8, display: 'flex', alignItems: 'center',
-                          justifyContent: 'space-between' }}>
-              <a href={shortUrl} target="_blank" rel="noreferrer"
-                style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>
-                {shortUrl}
-              </a>
-              <button
-                className="btn-copy"
-                onClick={handleCopy}
-                style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none',
-                         cursor: 'pointer' }}>
-                복사
-              </button>
-            </div>
-            <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <button
-                className="btn-kakao"
-                onClick={shareKakao}
-                style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
-                카카오톡 공유
-              </button>
-              <a
-                className="btn-linkedin"
-                href={shareUrls.linkedin} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
-                LinkedIn
-              </a>
-              <a
-                className="btn-twitter"
-                href={shareUrls.twitter} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>
-                Twitter
-              </a>
-              <a
-                className="btn-threads"
-                href={shareUrls.threads} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>
-                Threads
-              </a>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default App;
+          {/* 2. 여기서 <Linkedin ... /> 컴포넌트 라인을 삭제했습니다. */}
+          <h1 style={{ fontSize: 20, fontWeight
