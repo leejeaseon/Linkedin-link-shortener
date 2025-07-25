@@ -12,7 +12,7 @@ function App() {
     }
   }, []);
 
-  const extractCleanLink = (link) => {
+  const extractCleanLink = link => {
     const ugcMatch = link.match(/ugcPost-(\d+)/);
     if (ugcMatch) return `https://www.linkedin.com/feed/update/urn:li:ugcPost:${ugcMatch[1]}`;
     const activityMatch = link.match(/activity-(\d+)/);
@@ -33,7 +33,7 @@ function App() {
       objectType: 'feed',
       content: {
         title: 'LinkedIn 링크 클리너',
-        description: '복잡한 공유 링크를 깔끔하게 변환해보세요!',
+        description: '공유할 링크를 단축된 링크(cleanLink)로 설정했습니다.',
         imageUrl: 'https://linkedin-link-shortener.vercel.app/og-image.png',
         link: { mobileWebUrl: cleanLink, webUrl: cleanLink }
       },
@@ -44,22 +44,17 @@ function App() {
   };
 
   const shareUrls = {
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(cleanLink)}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(cleanLink)}`,
-    twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(cleanLink)}`,
-    threads: `https://www.threads.net/intent/post?url=${encodeURIComponent(cleanLink)}`
+    facebook: \`https://www.facebook.com/sharer/sharer.php?u=\${encodeURIComponent(cleanLink)}\`,
+    linkedin: \`https://www.linkedin.com/sharing/share-offsite/?url=\${encodeURIComponent(cleanLink)}\`,
+    twitter: \`https://twitter.com/intent/tweet?url=\${encodeURIComponent(cleanLink)}\`,
+    threads: \`https://www.threads.net/intent/post?url=\${encodeURIComponent(cleanLink)}\`
   };
 
   const shareBtnBase = {
-    padding: '6px 12px',
-    fontSize: 12,
-    borderRadius: 6,
-    textDecoration: 'none',
-    color: '#fff',
-    border: 'none',
-    cursor: 'pointer'
+    padding: '6px 12px', fontSize: 12,
+    borderRadius: 6, textDecoration: 'none',
+    color: '#fff', border: 'none', cursor: 'pointer'
   };
-
   const shareBtnStyles = {
     facebook: { background: '#4267B2' },
     linkedin: { background: '#0A66C2' },
@@ -68,42 +63,66 @@ function App() {
   };
 
   return (
-    <div style={{ background: '#f3f2ef', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+    <div style={{ background: '#f3f2ef', minHeight: '100vh', display: 'flex',
+                  justifyContent: 'center', alignItems: 'center', padding: 24 }}>
       <Helmet>
-        <meta name="description" content="복잡한 LinkedIn 공유 링크를 간단하고 깔끔하게 정리해 보세요." />
+        <title>LinkedIn 링크 클리너</title>
+        <meta name="description" content="복잡한 LinkedIn 공유 링크를 깔끔하게 변환해 보세요." />
         <meta property="og:title" content="LinkedIn 링크 클리너" />
-        <meta property="og:description" content="복잡한 공유 링크를 간단하게 정리합니다." />
+        <meta property="og:description" content="단축된 링크만 공유되도록 카카오톡 연동했습니다." />
         <meta property="og:image" content="https://linkedin-link-shortener.vercel.app/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
-      <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: 32, maxWidth: 500, width: '100%', boxSizing: 'border-box' }}>
+      <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                    padding: 32, maxWidth: 500, width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
           <Linkedin color="#0a66c2" size={28} />
-          <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>LinkedIn 링크 클리너</h1>
+          <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>
+            LinkedIn 링크 클리너
+          </h1>
         </div>
-        <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>지저분한 공유 링크를 깔끔하게 바꿔보세요.</p>
         <input
           type="text"
-          placeholder="여기에 LinkedIn 공유 링크를 붙여넣으세요"
+          placeholder="여기에 LinkedIn 링크 붙여넣기"
           value={originalLink}
-          onChange={(e) => setOriginalLink(e.target.value)}
+          onChange={e => setOriginalLink(e.target.value)}
           style={{ width: '100%', padding: 12, marginBottom: 12, border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }}
         />
-        <button onClick={handleConvert} style={{ width: '100%', padding: 12, background: '#0a66c2', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600 }}>
+        <button
+          onClick={handleConvert}
+          style={{ width: '100%', padding: 12, background: '#0a66c2', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600 }}
+        >
           깔끔한 링크 만들기
         </button>
         {cleanLink && (
           <div style={{ marginTop: 24 }}>
             <div style={{ padding: 16, border: '1px solid #cce0ff', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <a href={cleanLink} target="_blank" rel="noreferrer" style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>{cleanLink}</a>
-              <button onClick={handleCopy} style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none' }}>복사</button>
+              <a href={cleanLink} target="_blank" rel="noreferrer" style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>
+                {cleanLink}
+              </a>
+              <button onClick={handleCopy} style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none' }}>
+                복사
+              </button>
             </div>
             <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <button onClick={shareKakao} style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>카카오톡 공유</button>
-              <a href={shareUrls.facebook} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.facebook }}>Facebook</a>
-              <a href={shareUrls.linkedin} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>LinkedIn</a>
-              <a href={shareUrls.twitter} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>Twitter</a>
-              <a href={shareUrls.threads} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>Threads</a>
+              <button
+                onClick={shareKakao}
+                style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}
+              >
+                카카오톡 공유
+              </button>
+              <a href={shareUrls.facebook} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.facebook }}>
+                Facebook
+              </a>
+              <a href={shareUrls.linkedin} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
+                LinkedIn
+              </a>
+              <a href={shareUrls.twitter} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>
+                Twitter
+              </a>
+              <a href={shareUrls.threads} target="_blank" rel="noreferrer" style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>
+                Threads
+              </a>
             </div>
           </div>
         )}
