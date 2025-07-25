@@ -28,9 +28,30 @@ function App() {
   };
 
   const shareKakao = () => {
-    if (!window.Kakao) return alert('카카오 SDK 로딩 실패');
-    window.Kakao.Link.sendScrap({
-      requestUrl: cleanLink,
+  if (!window.Kakao) return alert('카카오 SDK 로딩 실패');
+
+  window.Kakao.Link.sendDefault({
+    objectType: 'feed',
+    // 1. 미리보기 영역에 표시될 내용을 직접 설정합니다.
+    content: {
+      title: 'LinkedIn 링크 클리너',
+      description: '정리된 LinkedIn 링크를 확인해 보세요.',
+      imageUrl: 'https://linkedin-link-shortener.vercel.app/og-image.png', // 서비스 대표 이미지
+      link: {
+        mobileWebUrl: cleanLink,
+        webUrl: cleanLink,
+      },
+    },
+    // 2. 버튼의 문구를 '지금 바로 보러가기'로 직접 지정합니다.
+    buttons: [
+      {
+        title: '지금 바로 보러가기',
+        link: {
+          mobileWebUrl: cleanLink,
+          webUrl: cleanLink,
+        },
+      },
+    ],
   });
 };
 
