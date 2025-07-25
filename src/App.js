@@ -55,10 +55,33 @@ function App() {
   // 카카오 공유 기능 등은 그대로 유지합니다. (필요에 따라 수정 가능)
   // App.js
   const shareKakao = () => {
-  if (!window.Kakao) return alert('카카오 SDK 로딩 실패');
-  window.Kakao.Link.sendScrap({
-    // 'cleanLink'를 'shortUrl'로 변경합니다.
-    requestUrl: shortUrl, 
+  if (!window.Kakao || !shortUrl) {
+    alert('먼저 URL을 단축해주세요.');
+    return;
+  }
+
+  window.Kakao.Link.sendDefault({
+    objectType: 'feed',
+    // 미리보기 내용을 직접 지정합니다.
+    content: {
+      title: '단축된 링크가 도착했어요!',
+      description: '아래 버튼을 눌러 링크를 확인해 보세요.',
+      // 서비스의 로고나 대표 이미지를 사용합니다.
+      imageUrl: 'https://linkedin-link-shortener.vercel.app/og-image.png',
+      link: {
+        mobileWebUrl: shortUrl,
+        webUrl: shortUrl,
+      },
+    },
+    buttons: [
+      {
+        title: '링크 바로가기',
+        link: {
+          mobileWebUrl: shortUrl,
+          webUrl: shortUrl,
+        },
+      },
+    ],
   });
 };
 
