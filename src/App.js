@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { X } from 'lucide-react'; // 1. X 아이콘을 불러옵니다.
+import { X } from 'lucide-react';
 
 function App() {
   const [originalLink, setOriginalLink] = useState('');
@@ -12,7 +12,6 @@ function App() {
     }
   }, []);
   
-  // 2. 입력 칸을 지우는 새로운 함수입니다.
   const handleClearInput = () => {
     setOriginalLink('');
   };
@@ -121,11 +120,11 @@ function App() {
               background-color: #1971c2 !important;
               color: #ffffff !important;
             }
-
-            /* 3. X 아이콘과 감싸는 div를 위한 스타일입니다. */
             .input-wrapper {
               position: relative;
               width: 100%;
+              /* ▼▼▼ 이 div에 marginBottom을 추가합니다. ▼▼▼ */
+              margin-bottom: 12px;
             }
             .clear-icon {
               position: absolute;
@@ -152,12 +151,12 @@ function App() {
         <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
           긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
         </p>
-
-        {/* 4. input과 X 아이콘을 div로 감싸 위치를 조정합니다. */}
+        
         <div className="input-wrapper">
+          {/* ▼▼▼ input에서는 marginBottom을 제거합니다. ▼▼▼ */}
           <input type="text" placeholder="여기에 링크드인 URL을 붙여넣으세요"
             value={originalLink} onChange={e => setOriginalLink(e.target.value)}
-            style={{ width: '100%', padding: '12px 40px 12px 12px', marginBottom: 12,
+            style={{ width: '100%', padding: '12px 40px 12px 12px',
                      border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
           {originalLink && (
             <X className="clear-icon" size={20} onClick={handleClearInput} />
