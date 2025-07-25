@@ -114,7 +114,7 @@ function App() {
             .btn-linkedin:hover { background-color: #004182 !important; }
             .btn-twitter:hover { background-color: #0c8de4 !important; }
             .btn-threads:hover { background-color: #444444 !important; }
-            .btn-share-service:hover { background-color: #d0ebff !important; }
+            .btn-share-service:hover { background-color: #a6d4ff !important; }
           `}
         </style>
       </Helmet>
