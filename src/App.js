@@ -15,7 +15,7 @@ const App = () => {
     try {
       const match = url.match(/(ugcPost|activity)-([0-9]+)/);
       if (match) {
-        return `https://www.linkedin.com/feed/update/urn:li:${match[1]}:${match[2]}`;
+        return \`https://www.linkedin.com/feed/update/urn:li:\${match[1]}:\${match[2]}\`;
       }
     } catch (e) {}
     return "";
@@ -57,7 +57,7 @@ const App = () => {
   };
 
   const shareLinkedIn = () => {
-    const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(cleanLink)}`;
+    const shareUrl = \`https://www.linkedin.com/sharing/share-offsite/?url=\${encodeURIComponent(cleanLink)}\`;
     window.open(shareUrl, "_blank");
   };
 
