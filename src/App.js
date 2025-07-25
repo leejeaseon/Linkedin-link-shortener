@@ -35,11 +35,11 @@ function App() {
 };
 
   const shareUrls = {
-    facebook: \`https://www.facebook.com/sharer/sharer.php?u=\${encodeURIComponent(cleanLink)}\`,
-    linkedin: \`https://www.linkedin.com/sharing/share-offsite/?url=\${encodeURIComponent(cleanLink)}\`,
-    twitter: \`https://twitter.com/intent/tweet?url=\${encodeURIComponent(cleanLink)}\`,
-    threads: \`https://www.threads.net/intent/post?url=\${encodeURIComponent(cleanLink)}\`
-  };
+  facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(cleanLink)}`,
+  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(cleanLink)}`,
+  twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(cleanLink)}`,
+  threads: `https://www.threads.net/intent/post?url=${encodeURIComponent(cleanLink)}`
+};
 
   const shareBtnBase = {
     padding: '6px 12px', fontSize: 12,
