@@ -8,6 +8,7 @@
     "react-scripts": "5.0.1",
     "lucide-react": "^0.321.0",
     "react-helmet": "^6.1.0"
+    "@vercel/kv": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
