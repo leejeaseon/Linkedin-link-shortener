@@ -82,7 +82,6 @@ function App() {
   };
 
   const shareUrls = {
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shortUrl)}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shortUrl)}`,
     twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shortUrl)}`,
     threads: `https://www.threads.net/intent/post?url=${encodeURIComponent(shortUrl)}`
