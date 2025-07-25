@@ -92,8 +92,8 @@ function App() {
                   justifyContent: 'center', alignItems: 'center', padding: 24 }}>
     {/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */}
       <Helmet>
-        <title>URL Shortener</title>
-        <meta name="description" content="긴 주소를 짧고 공유하기 쉽게 만들어보세요." />
+        <title>Linkedn Tips</title>
+        <meta name="description" content="긴 링크드이 주소를 짧고 공유하기 쉽게 만들어보세요." />
         <style>
           {`
             .btn-shorten:hover { background-color: #ff4757 !important; }
@@ -110,13 +110,13 @@ function App() {
                     maxWidth: 500, width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
           <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>
-            URL Shortener
+            Linkedn Tips
           </h1>
         </div>
         <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
-          긴 URL을 짧은 주소로 만들어 공유해 보세요.
+          긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
         </p>
-        <input type="text" placeholder="여기에 긴 URL을 붙여넣으세요"
+        <input type="text" placeholder="여기에 링크드인 URL을 붙여넣으세요"
           value={originalLink} onChange={e => setOriginalLink(e.target.value)}
           style={{ width: '100%', padding: 12, marginBottom: 12,
                    border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
@@ -127,7 +127,7 @@ function App() {
           style={{ width: '100%', padding: 12, background: '#0a66c2',
                    color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
                    cursor: 'pointer' }}>
-          단축 링크 만들기
+          링크 이쁘게 줄이기
         </button>
 
         {shortUrl && (
