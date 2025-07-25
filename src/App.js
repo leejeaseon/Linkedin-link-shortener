@@ -75,7 +75,7 @@ function App() {
     },
     buttons: [
       {
-        title: '링크 바로가기',
+        title: '링크드인 콘텐츠 읽기',
         link: {
           mobileWebUrl: shortUrl,
           webUrl: shortUrl,
