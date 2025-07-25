@@ -114,7 +114,7 @@ function App() {
             .btn-linkedin:hover { background-color: #004182 !important; }
             .btn-twitter:hover { background-color: #0c8de4 !important; }
             .btn-threads:hover { background-color: #444444 !important; }
-            .btn-share-service:hover { background-color: #e9e9e9 !important; }
+            .btn-share-service:hover { background-color: #d0ebff !important; }
           `}
         </style>
       </Helmet>
@@ -146,8 +146,10 @@ function App() {
         <button
           className="btn-share-service"
           onClick={handleShareService}
-          style={{ width: '100%', padding: 10, background: '#f8f9fa',
-                   color: '#343a40', border: '1px solid #dee2e6', borderRadius: 8, fontWeight: 600,
+          style={{ width: '100%', padding: 10, background: '#e7f5ff', // 배경색 변경
+                   color: '#1971c2', // 글자색 변경
+                   border: '1px solid #a5d8ff', // 테두리색 변경
+                   borderRadius: 8, fontWeight: 600,
                    cursor: 'pointer', marginTop: '8px' }}>
           이 서비스 공유하기
         </button>
