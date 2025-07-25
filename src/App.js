@@ -111,11 +111,11 @@ function App() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
           <Linkedin color="#0a66c2" size={28} />
           <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>
-            URL Shortener
+            Linkedn tips
           </h1>
         </div>
         <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
-          긴 URL을 짧은 주소로 만들어 공유해 보세요.
+          긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
         </p>
         <input type="text" placeholder="여기에 긴 URL을 붙여넣으세요"
           value={originalLink} onChange={e => setOriginalLink(e.target.value)}
