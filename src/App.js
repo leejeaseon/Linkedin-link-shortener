@@ -37,42 +37,30 @@ function App() {
     alert('링크가 복사되었습니다!');
   };
   
-  // shareKakao 함수를 아래와 같이 수정합니다.
   const shareKakao = async () => {
     if (!shortUrl || !originalLink) {
       alert('먼저 URL을 단축해주세요.');
       return;
     }
     if (!window.Kakao) return alert('카카오 SDK 로딩 실패');
-
     try {
-      // 1. 우리 서버의 get-preview API에 원본 링크의 미리보기 정보를 요청합니다.
       const response = await fetch(`/api/get-preview?url=${encodeURIComponent(originalLink)}`);
       const preview = await response.json();
-
       if (!response.ok) {
         throw new Error(preview.message || '미리보기 정보를 가져올 수 없습니다.');
       }
-
-      // 2. 받아온 미리보기 정보 + 단축 URL 조합으로 카카오톡 메시지를 보냅니다.
       window.Kakao.Link.sendDefault({
         objectType: 'feed',
         content: {
           title: preview.title || '공유된 링크',
           description: preview.description || '내용을 확인해보세요.',
           imageUrl: preview.imageUrl || 'https://linkedin-link-shortener.vercel.app/og-image.png',
-          link: {
-            mobileWebUrl: shortUrl, // 링크는 단축 URL
-            webUrl: shortUrl,       // 링크는 단축 URL
-          },
+          link: { mobileWebUrl: shortUrl, webUrl: shortUrl },
         },
         buttons: [
           {
             title: '게시물 보러가기',
-            link: {
-              mobileWebUrl: shortUrl, // 버튼 링크도 단축 URL
-              webUrl: shortUrl,       // 버튼 링크도 단축 URL
-            },
+            link: { mobileWebUrl: shortUrl, webUrl: shortUrl },
           },
         ],
       });
@@ -103,6 +91,19 @@ function App() {
       <Helmet>
         <title>URL Shortener</title>
         <meta name="description" content="긴 주소를 짧고 공유하기 쉽게 만들어보세요." />
+        {/* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */}
+        {/* 1. 여기에 <style> 태그를 추가하여 호버 효과를 정의합니다. */}
+        <style>
+          {`
+            .btn-shorten:hover { background-color: #ff4757 !important; }
+            .btn-copy:hover { background-color: #2f3542 !important; color: white !important; }
+            .btn-kakao:hover { background-color: #fbe500 !important; filter: brightness(0.9); }
+            .btn-linkedin:hover { background-color: #004182 !important; }
+            .btn-twitter:hover { background-color: #0c8de4 !important; }
+            .btn-threads:hover { background-color: #444444 !important; }
+          `}
+        </style>
+        {/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */}
       </Helmet>
       <div style={{ background: '#fff', borderRadius: 16,
                     boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: 32,
@@ -120,24 +121,18 @@ function App() {
           value={originalLink} onChange={e => setOriginalLink(e.target.value)}
           style={{ width: '100%', padding: 12, marginBottom: 12,
                    border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
+        
+        {/* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */}
+        {/* 2. 각 버튼/링크에 className을 추가합니다. */}
         <button
+          className="btn-shorten"
           onClick={handleShorten}
-            style={{
-              width: '100%',
-              padding: 12,
-              background: '#0a66c2',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 8,
-              fontWeight: 600,
-              cursor: 'pointer',
-              ':hover': { // 호버 시 스타일
-                background: '#074d8f', // 원래 색상보다 약간 어둡게
-              },
-            }}
-          >
-            단축 링크 만들기
+          style={{ width: '100%', padding: 12, background: '#0a66c2',
+                   color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
+                   cursor: 'pointer' }}>
+          단축 링크 만들기
         </button>
+
         {shortUrl && (
           <div style={{ marginTop: 24 }}>
             <div style={{ padding: 16, border: '1px solid #cce0ff',
@@ -148,76 +143,36 @@ function App() {
                 {shortUrl}
               </a>
               <button
+                className="btn-copy"
                 onClick={handleCopy}
-                style={{
-                  padding: '6px 12px',
-                  background: '#eee',
-                  borderRadius: 6,
-                  border: 'none',
-                  cursor: 'pointer',
-                  ':hover': { // 호버 시 스타일
-                    background: '#ddd', // 원래 색상보다 약간 어둡게
-                  },
-                }}
-              >
+                style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none',
+                         cursor: 'pointer' }}>
                 복사
               </button>
             </div>
             <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
               <button
+                className="btn-kakao"
                 onClick={shareKakao}
-                style={{
-                  ...shareBtnBase,
-                  background: '#fee500',
-                  color: '#191919',
-                  cursor: 'pointer',
-                  ':hover': { // 호버 시 스타일
-                    background: '#fdd835', // 원래 색상보다 약간 어둡게
-                    },
-                    }}
-                  >
+                style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
                 카카오톡 공유
               </button>
-              <a href={shareUrls.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  ...shareBtnBase,
-                  ...shareBtnStyles.linkedin,
-                  cursor: 'pointer',
-                  ':hover': { // 호버 시 스타일
-                    background: '#084b8a', // 원래 색상보다 약간 어둡게
-                  },
-                }}
-              >
+              <a
+                className="btn-linkedin"
+                href={shareUrls.linkedin} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
                 LinkedIn
               </a>
-              <a href={shareUrls.twitter}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  ...shareBtnBase,
-                  ...shareBtnStyles.twitter,
-                  cursor: 'pointer',
-                  ':hover': { // 호버 시 스타일
-                    background: '#177ac9', // 원래 색상보다 약간 어둡게
-                  },
-                }}
-              >
+              <a
+                className="btn-twitter"
+                href={shareUrls.twitter} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>
                 Twitter
               </a>
-              <a href={shareUrls.threads}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  ...shareBtnBase,
-                  ...shareBtnStyles.threads,
-                  cursor: 'pointer',
-                  ':hover': { // 호버 시 스타일
-                    background: '#000000', // 원래 색상보다 약간 어둡게 (Threads는 검정색 계열)
-                  },
-                }}
-              >
+              <a
+                className="btn-threads"
+                href={shareUrls.threads} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>
                 Threads
               </a>
             </div>
