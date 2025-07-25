@@ -1,30 +1,19 @@
-# LinkedIn 링크 클리너
+# LinkedIn Link Cleaner
 
-복잡한 LinkedIn 공유 링크를 간단하고 깔끔하게 정리해주는 웹 도구입니다.
+지저분한 LinkedIn 공유 링크를 깔끔한 형태로 변환해주는 React 웹앱입니다.
 
 ## 기능
-- UGC 및 activity 형식 링크 자동 추출 및 정리
-- 복사 버튼으로 빠른 링크 복사
-- 소셜 공유 버튼 (카카오톡, Facebook, LinkedIn, Twitter, Threads)
-- SEO 및 Open Graph 메타태그 포함
-- Kakao Developers JavaScript SDK 통합
+- `ugcPost`, `activity` 링크 정리
+- 카카오톡, LinkedIn 공유 기능
+- 클립보드 복사
 
-## 설치 및 실행
+## 개발 및 실행
 
 ```bash
 npm install
+cp .env.example .env # 그리고 .env에 KAKAO 키 입력
 npm start
 ```
 
-## 환경 변수 설정
-
-로컬 개발용 `.env` 파일을 만드시고, 다음을 추가하세요:
-
-```
-REACT_APP_KAKAO_KEY=YOUR_KAKAO_JS_KEY_HERE
-```
-
 ## 배포
-
-- Vercel, Netlify 등으로 바로 배포 가능합니다.
-- Vercel 환경 변수에도 `REACT_APP_KAKAO_KEY`를 설정하세요.
+Vercel로 배포하며, `.env`의 KAKAO 키도 등록 필요
