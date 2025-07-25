@@ -36,28 +36,14 @@ function App() {
     alert('링크가 복사되었습니다!');
   };
 
-  // 1. 서비스 공유 버튼을 위한 새로운 함수입니다.
-  const handleShareService = async () => {
+  // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+  // 이 함수의 기능을 클립보드 복사로만 단순화했습니다.
+  const handleShareService = () => {
     const serviceUrl = 'https://linkedin-link-shortener.vercel.app';
-    const shareData = {
-      title: 'Linkedn Tips',
-      text: '긴 링크드인 주소를 짧고 공유하기 쉽게 만들어주는 서비스!',
-      url: serviceUrl,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-        // 성공 시 별도 메시지 없음
-      } catch (err) {
-        console.error('Share failed:', err);
-      }
-    } else {
-      // Web Share API를 지원하지 않는 경우, 클립보드에 복사
-      navigator.clipboard.writeText(serviceUrl);
-      alert('서비스 링크가 복사되었습니다!');
-    }
+    navigator.clipboard.writeText(serviceUrl);
+    alert('서비스 링크가 복사되었습니다!');
   };
+  // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
   
   const shareKakao = async () => {
     if (!shortUrl || !originalLink) {
@@ -128,8 +114,6 @@ function App() {
             .btn-linkedin:hover { background-color: #004182 !important; }
             .btn-twitter:hover { background-color: #0c8de4 !important; }
             .btn-threads:hover { background-color: #444444 !important; }
-            
-            /* 2. 새로운 공유 버튼을 위한 호버 스타일입니다. */
             .btn-share-service:hover { background-color: #e9e9e9 !important; }
           `}
         </style>
@@ -159,7 +143,6 @@ function App() {
           링크 이쁘게 줄이기
         </button>
 
-        {/* 3. 새로운 서비스 공유 버튼입니다. */}
         <button
           className="btn-share-service"
           onClick={handleShareService}
