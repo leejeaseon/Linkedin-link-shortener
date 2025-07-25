@@ -57,7 +57,7 @@ const App = () => {
   };
 
   const shareLinkedIn = () => {
-    const shareUrl = \`https://www.linkedin.com/sharing/share-offsite/?url=\${encodeURIComponent(cleanLink)}\`;
+    const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(cleanLink)}`;
     window.open(shareUrl, "_blank");
   };
 

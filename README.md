@@ -11,7 +11,7 @@
 
 ```bash
 npm install
-cp .env.example .env # 그리고 .env에 KAKAO 키 입력
+cp .env.example .env
 npm start
 ```
 
