@@ -35,6 +35,29 @@ function App() {
     navigator.clipboard.writeText(shortUrl);
     alert('링크가 복사되었습니다!');
   };
+
+  // 1. 서비스 공유 버튼을 위한 새로운 함수입니다.
+  const handleShareService = async () => {
+    const serviceUrl = 'https://linkedin-link-shortener.vercel.app';
+    const shareData = {
+      title: 'Linkedn Tips',
+      text: '긴 링크드인 주소를 짧고 공유하기 쉽게 만들어주는 서비스!',
+      url: serviceUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        // 성공 시 별도 메시지 없음
+      } catch (err) {
+        console.error('Share failed:', err);
+      }
+    } else {
+      // Web Share API를 지원하지 않는 경우, 클립보드에 복사
+      navigator.clipboard.writeText(serviceUrl);
+      alert('서비스 링크가 복사되었습니다!');
+    }
+  };
   
   const shareKakao = async () => {
     if (!shortUrl || !originalLink) {
@@ -93,21 +116,21 @@ function App() {
         <meta name="description" content="긴 링크드인 주소를 짧고 공유하기 쉽게 만들어보세요." />
         <style>
           {`
-            /* ▼▼▼▼▼ 브라우저 기본 여백을 제거하여 배경을 꽉 채웁니다 ▼▼▼▼▼ */
             html, body {
               margin: 0;
               padding: 0;
               width: 100%;
               height: 100%;
             }
-            /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
-
             .btn-shorten:hover { background-color: #ff4757 !important; }
             .btn-copy:hover { background-color: #2f3542 !important; color: white !important; }
             .btn-kakao:hover { background-color: #fbe500 !important; filter: brightness(0.9); }
             .btn-linkedin:hover { background-color: #004182 !important; }
             .btn-twitter:hover { background-color: #0c8de4 !important; }
             .btn-threads:hover { background-color: #444444 !important; }
+            
+            /* 2. 새로운 공유 버튼을 위한 호버 스타일입니다. */
+            .btn-share-service:hover { background-color: #e9e9e9 !important; }
           `}
         </style>
       </Helmet>
@@ -134,6 +157,16 @@ function App() {
                    color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
                    cursor: 'pointer' }}>
           링크 이쁘게 줄이기
+        </button>
+
+        {/* 3. 새로운 서비스 공유 버튼입니다. */}
+        <button
+          className="btn-share-service"
+          onClick={handleShareService}
+          style={{ width: '100%', padding: 10, background: '#f8f9fa',
+                   color: '#343a40', border: '1px solid #dee2e6', borderRadius: 8, fontWeight: 600,
+                   cursor: 'pointer', marginTop: '8px' }}>
+          이 서비스 공유하기
         </button>
 
         {shortUrl && (
