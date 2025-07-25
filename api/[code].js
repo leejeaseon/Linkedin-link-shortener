@@ -1,5 +1,4 @@
 import { kv } from '@vercel/kv';
-import * as cheerio from 'cheerio';
 
 export default async function handler(request, response) {
   const { code } = request.query;
@@ -16,12 +15,12 @@ export default async function handler(request, response) {
     if (isScraper) {
       const apiKey = process.env.JSONLINK_API_KEY;
       
-      // ▼▼▼ longUrl을 encodeURIComponent로 감싸서 인코딩 문제를 해결합니다. ▼▼▼
-      const apiUrl = `https://jsonlink.io/api/extractor?url=${encodeURIComponent(longUrl)}&api_key=${apiKey}`;
+      // ▼▼▼ 'extractor'를 'preview'로 수정합니다. ▼▼▼
+      const apiUrl = `https://jsonlink.io/api/preview?url=${encodeURIComponent(longUrl)}&api_key=${apiKey}`;
       
       const previewResponse = await fetch(apiUrl);
+      
       if (!previewResponse.ok) {
-        // 응답 내용을 확인하기 위해 .text()를 먼저 호출
         const errorText = await previewResponse.text();
         console.error("JsonLink Error Response:", errorText);
         throw new Error(`Failed to fetch preview data from JsonLink with status: ${previewResponse.status}`);
