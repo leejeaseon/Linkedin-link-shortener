@@ -139,7 +139,7 @@ function App() {
                 복사
               </button>
             </div>
-            <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
               <button onClick={shareKakao}
                 style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
                 카카오톡 공유
