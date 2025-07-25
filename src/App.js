@@ -92,7 +92,6 @@ function App() {
     textDecoration: 'none', color: '#fff', border: 'none', cursor: 'pointer'
   };
   const shareBtnStyles = {
-    facebook: { background: '#4267B2' },
     linkedin: { background: '#0A66C2' },
     twitter: { background: '#1DA1F2' },
     threads: { background: '#10141A' }
@@ -145,10 +144,6 @@ function App() {
                 style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
                 카카오톡 공유
               </button>
-              <a href={shareUrls.facebook} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.facebook }}>
-                Facebook
-              </a>
               <a href={shareUrls.linkedin} target="_blank" rel="noreferrer"
                 style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
                 LinkedIn
