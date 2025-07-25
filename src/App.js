@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { X } from 'lucide-react'; // 1. X 아이콘을 불러옵니다.
 
 function App() {
   const [originalLink, setOriginalLink] = useState('');
@@ -11,6 +12,11 @@ function App() {
     }
   }, []);
   
+  // 2. 입력 칸을 지우는 새로운 함수입니다.
+  const handleClearInput = () => {
+    setOriginalLink('');
+  };
+
   const handleShorten = async () => {
     if (!originalLink) {
       alert('URL을 입력해주세요.');
@@ -37,7 +43,6 @@ function App() {
   };
 
   const handleShareService = () => {
-    // ▼▼▼ 1. 서비스 공유 주소 변경 ▼▼▼
     const serviceUrl = 'https://linkedntips.com';
     navigator.clipboard.writeText(serviceUrl);
     alert('서비스 링크가 복사되었습니다!');
@@ -60,7 +65,6 @@ function App() {
         content: {
           title: preview.title || '공유된 링크',
           description: preview.description || '내용을 확인해보세요.',
-          // ▼▼▼ 2. 카카오톡 기본 이미지 주소 변경 ▼▼▼
           imageUrl: preview.imageUrl || 'https://linkedntips.com/og-image.png',
           link: { mobileWebUrl: shortUrl, webUrl: shortUrl },
         },
@@ -99,8 +103,6 @@ function App() {
       <Helmet>
         <title>Linkedn Tips</title>
         <meta name="description" content="긴 링크드인 주소를 짧고 공유하기 쉽게 만들어보세요." />
-        {/* ▼▼▼ 3. OG 기본 이미지 주소 변경 ▼▼▼ */}
-        <meta property="og:image" content="https://linkedntips.com/og-image.png" />
         <style>
           {`
             html, body {
@@ -119,6 +121,23 @@ function App() {
               background-color: #1971c2 !important;
               color: #ffffff !important;
             }
+
+            /* 3. X 아이콘과 감싸는 div를 위한 스타일입니다. */
+            .input-wrapper {
+              position: relative;
+              width: 100%;
+            }
+            .clear-icon {
+              position: absolute;
+              right: 12px;
+              top: 50%;
+              transform: translateY(-50%);
+              cursor: pointer;
+              color: #999;
+            }
+            .clear-icon:hover {
+              color: #333;
+            }
           `}
         </style>
       </Helmet>
@@ -133,10 +152,17 @@ function App() {
         <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
           긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
         </p>
-        <input type="text" placeholder="여기에 링크드인 URL을 붙여넣으세요"
-          value={originalLink} onChange={e => setOriginalLink(e.target.value)}
-          style={{ width: '100%', padding: 12, marginBottom: 12,
-                   border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
+
+        {/* 4. input과 X 아이콘을 div로 감싸 위치를 조정합니다. */}
+        <div className="input-wrapper">
+          <input type="text" placeholder="여기에 링크드인 URL을 붙여넣으세요"
+            value={originalLink} onChange={e => setOriginalLink(e.target.value)}
+            style={{ width: '100%', padding: '12px 40px 12px 12px', marginBottom: 12,
+                     border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
+          {originalLink && (
+            <X className="clear-icon" size={20} onClick={handleClearInput} />
+          )}
+        </div>
         
         <button
           className="btn-shorten"
