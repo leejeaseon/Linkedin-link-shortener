@@ -1,46 +1,33 @@
 import { kv } from '@vercel/kv';
+import * as cheerio from 'cheerio';
 
 export default async function handler(request, response) {
-  console.log('--- API 요청 시작 ---');
   const { code } = request.query;
   const userAgent = request.headers['user-agent'];
-  console.log(`요청받은 단축 코드: ${code}`);
-  console.log(`접속 User-Agent: ${userAgent}`);
 
   try {
     const longUrl = await kv.get(code);
     if (!longUrl) {
-      console.log('DB에서 URL을 찾지 못했습니다.');
       return response.status(404).send('Not Found');
     }
-    console.log(`DB에서 찾은 원본 URL: ${longUrl}`);
 
     const isScraper = /kakaotalk|facebook|twitter|slack|Discordbot|opengraph/i.test(userAgent);
-    console.log(`스크래퍼 여부: ${isScraper}`);
 
     if (isScraper) {
-      console.log('스크래퍼로 판단, JsonLink API로 미리보기 정보 요청을 시작합니다.');
-
       const apiKey = process.env.JSONLINK_API_KEY;
-      // ▼▼▼ API 키가 제대로 설정되었는지 확인하는 로그 추가 ▼▼▼
-      console.log(`JsonLink API 키 존재 여부: ${apiKey ? '있음' : '없음!!!'}`);
-
+      
+      // ▼▼▼ longUrl을 encodeURIComponent로 감싸서 인코딩 문제를 해결합니다. ▼▼▼
       const apiUrl = `https://jsonlink.io/api/extractor?url=${encodeURIComponent(longUrl)}&api_key=${apiKey}`;
-      console.log(`호출할 JsonLink API 주소: ${apiUrl}`);
-
+      
       const previewResponse = await fetch(apiUrl);
-
-      // ▼▼▼ JsonLink API의 응답 상태를 확인하는 로그 추가 ▼▼▼
-      console.log(`JsonLink API 응답 상태 코드: ${previewResponse.status}`);
-
-      const responseText = await previewResponse.text();
-      console.log(`JsonLink API 응답 내용(Raw Text): ${responseText}`);
-
       if (!previewResponse.ok) {
-        throw new Error('JsonLink API로부터 에러 응답을 받았습니다.');
+        // 응답 내용을 확인하기 위해 .text()를 먼저 호출
+        const errorText = await previewResponse.text();
+        console.error("JsonLink Error Response:", errorText);
+        throw new Error(`Failed to fetch preview data from JsonLink with status: ${previewResponse.status}`);
       }
-
-      const preview = JSON.parse(responseText);
+      
+      const preview = await previewResponse.json();
 
       const title = preview.title || 'Linkedn Tips';
       const description = preview.description || '링크를 확인해보세요.';
@@ -57,20 +44,20 @@ export default async function handler(request, response) {
             <meta property="og:image" content="${imageUrl}">
             <meta http-equiv="refresh" content="0; url=${longUrl}">
           </head>
-          <body><p>Redirecting...</p></body>
+          <body>
+            <p>Redirecting to <a href="${longUrl}">${longUrl}</a>...</p>
+          </body>
         </html>
       `;
-
+      
       response.setHeader('Content-Type', 'text/html');
       return response.status(200).send(htmlResponse);
 
     } else {
-      console.log('일반 사용자이므로 리디렉션합니다.');
       return response.redirect(301, longUrl);
     }
 
   } catch (error) {
-    console.error('--- !!! CATCH 블록에서 오류 발생 !!! ---');
     console.error(error);
     return response.status(500).send('Internal Server Error');
   }
