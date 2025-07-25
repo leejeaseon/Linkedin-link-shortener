@@ -120,11 +120,23 @@ function App() {
           value={originalLink} onChange={e => setOriginalLink(e.target.value)}
           style={{ width: '100%', padding: 12, marginBottom: 12,
                    border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
-        <button onClick={handleShorten}
-          style={{ width: '100%', padding: 12, background: '#0a66c2',
-           color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
-           cursor: 'pointer' }}> {/* 이 부분을 추가합니다 */}
-          단축 링크 만들기
+        <button
+          onClick={handleShorten}
+            style={{
+              width: '100%',
+              padding: 12,
+              background: '#0a66c2',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 8,
+              fontWeight: 600,
+              cursor: 'pointer',
+              ':hover': { // 호버 시 스타일
+                background: '#074d8f', // 원래 색상보다 약간 어둡게
+              },
+            }}
+          >
+            단축 링크 만들기
         </button>
         {shortUrl && (
           <div style={{ marginTop: 24 }}>
@@ -135,27 +147,77 @@ function App() {
                 style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>
                 {shortUrl}
               </a>
-              <button onClick={handleCopy}
-                style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none',
-                 cursor: 'pointer' }}> {/* 이 부분을 추가합니다 */}
+              <button
+                onClick={handleCopy}
+                style={{
+                  padding: '6px 12px',
+                  background: '#eee',
+                  borderRadius: 6,
+                  border: 'none',
+                  cursor: 'pointer',
+                  ':hover': { // 호버 시 스타일
+                    background: '#ddd', // 원래 색상보다 약간 어둡게
+                  },
+                }}
+              >
                 복사
               </button>
             </div>
             <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <button onClick={shareKakao}
-                style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
+              <button
+                onClick={shareKakao}
+                style={{
+                  ...shareBtnBase,
+                  background: '#fee500',
+                  color: '#191919',
+                  cursor: 'pointer',
+                  ':hover': { // 호버 시 스타일
+                    background: '#fdd835', // 원래 색상보다 약간 어둡게
+                    },
+                    }}
+                  >
                 카카오톡 공유
               </button>
-              <a href={shareUrls.linkedin} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
+              <a href={shareUrls.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  ...shareBtnBase,
+                  ...shareBtnStyles.linkedin,
+                  cursor: 'pointer',
+                  ':hover': { // 호버 시 스타일
+                    background: '#084b8a', // 원래 색상보다 약간 어둡게
+                  },
+                }}
+              >
                 LinkedIn
               </a>
-              <a href={shareUrls.twitter} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>
+              <a href={shareUrls.twitter}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  ...shareBtnBase,
+                  ...shareBtnStyles.twitter,
+                  cursor: 'pointer',
+                  ':hover': { // 호버 시 스타일
+                    background: '#177ac9', // 원래 색상보다 약간 어둡게
+                  },
+                }}
+              >
                 Twitter
               </a>
-              <a href={shareUrls.threads} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>
+              <a href={shareUrls.threads}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  ...shareBtnBase,
+                  ...shareBtnStyles.threads,
+                  cursor: 'pointer',
+                  ':hover': { // 호버 시 스타일
+                    background: '#000000', // 원래 색상보다 약간 어둡게 (Threads는 검정색 계열)
+                  },
+                }}
+              >
                 Threads
               </a>
             </div>
