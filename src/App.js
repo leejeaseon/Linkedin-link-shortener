@@ -122,7 +122,8 @@ function App() {
                    border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
         <button onClick={handleShorten}
           style={{ width: '100%', padding: 12, background: '#0a66c2',
-                   color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600 }}>
+           color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
+           cursor: 'pointer' }}> {/* 이 부분을 추가합니다 */}
           단축 링크 만들기
         </button>
         {shortUrl && (
@@ -135,7 +136,8 @@ function App() {
                 {shortUrl}
               </a>
               <button onClick={handleCopy}
-                style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none' }}>
+                style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none',
+                 cursor: 'pointer' }}> {/* 이 부분을 추가합니다 */}
                 복사
               </button>
             </div>
