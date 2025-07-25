@@ -15,7 +15,7 @@ const App = () => {
     try {
       const match = url.match(/(ugcPost|activity)-([0-9]+)/);
       if (match) {
-        return \`https://www.linkedin.com/feed/update/urn:li:\${match[1]}:\${match[2]}\`;
+        return `https://www.linkedin.com/feed/update/urn:li:${match[1]}:${match[2]}`;
       }
     } catch (e) {}
     return "";
