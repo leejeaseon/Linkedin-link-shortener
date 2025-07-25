@@ -36,14 +36,12 @@ function App() {
     alert('링크가 복사되었습니다!');
   };
 
-  // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-  // 이 함수의 기능을 클립보드 복사로만 단순화했습니다.
   const handleShareService = () => {
-    const serviceUrl = 'https://linkedin-link-shortener.vercel.app';
+    // ▼▼▼ 1. 서비스 공유 주소 변경 ▼▼▼
+    const serviceUrl = 'https://linkedntips.com';
     navigator.clipboard.writeText(serviceUrl);
     alert('서비스 링크가 복사되었습니다!');
   };
-  // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
   
   const shareKakao = async () => {
     if (!shortUrl || !originalLink) {
@@ -62,7 +60,8 @@ function App() {
         content: {
           title: preview.title || '공유된 링크',
           description: preview.description || '내용을 확인해보세요.',
-          imageUrl: preview.imageUrl || 'https://linkedin-link-shortener.vercel.app/og-image.png',
+          // ▼▼▼ 2. 카카오톡 기본 이미지 주소 변경 ▼▼▼
+          imageUrl: preview.imageUrl || 'https://linkedntips.com/og-image.png',
           link: { mobileWebUrl: shortUrl, webUrl: shortUrl },
         },
         buttons: [
@@ -100,6 +99,8 @@ function App() {
       <Helmet>
         <title>Linkedn Tips</title>
         <meta name="description" content="긴 링크드인 주소를 짧고 공유하기 쉽게 만들어보세요." />
+        {/* ▼▼▼ 3. OG 기본 이미지 주소 변경 ▼▼▼ */}
+        <meta property="og:image" content="https://linkedntips.com/og-image.png" />
         <style>
           {`
             html, body {
@@ -114,7 +115,10 @@ function App() {
             .btn-linkedin:hover { background-color: #004182 !important; }
             .btn-twitter:hover { background-color: #0c8de4 !important; }
             .btn-threads:hover { background-color: #444444 !important; }
-            .btn-share-service:hover { background-color: #000000 !important; color: #ffffff !important; }
+            .btn-share-service:hover { 
+              background-color: #1971c2 !important;
+              color: #ffffff !important;
+            }
           `}
         </style>
       </Helmet>
@@ -146,9 +150,8 @@ function App() {
         <button
           className="btn-share-service"
           onClick={handleShareService}
-          style={{ width: '100%', padding: 10, background: '#e7f5ff', // 배경색 변경
-                   color: '#1971c2', // 글자색 변경
-                   border: '1px solid #a5d8ff', // 테두리색 변경
+          style={{ width: '100%', padding: 10, background: '#e7f5ff', 
+                   color: '#1971c2', border: '1px solid #a5d8ff', 
                    borderRadius: 8, fontWeight: 600,
                    cursor: 'pointer', marginTop: '8px' }}>
           이 서비스 공유하기
