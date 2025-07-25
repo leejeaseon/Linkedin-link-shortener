@@ -4,86 +4,82 @@ import { Helmet } from 'react-helmet';
 
 function App() {
   const [originalLink, setOriginalLink] = useState('');
-  // 1. 'cleanLink'를 'shortUrl'로 이름을 변경하여 역할을 명확히 합니다.
   const [shortUrl, setShortUrl] = useState('');
 
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.REACT_APP_KAKAO_KEY);
-      console.log('Kakao Initialized:', window.Kakao.isInitialized());
     }
   }, []);
   
-  // 2. 버튼 클릭 시 작동하는 함수를 API 호출 로직으로 완전히 교체합니다.
   const handleShorten = async () => {
     if (!originalLink) {
       alert('URL을 입력해주세요.');
       return;
     }
-
     try {
       const response = await fetch('/api/shorten', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ longUrl: originalLink }),
       });
-
       const data = await response.json();
-
-      if (!response.ok) {
-        // 서버에서 보낸 오류 메시지를 사용합니다.
-        throw new Error(data.message || '알 수 없는 오류가 발생했습니다.');
-      }
-
-      // 상태에 새로 받은 단축 URL을 저장합니다.
+      if (!response.ok) throw new Error(data.message || '알 수 없는 오류');
       setShortUrl(data.shortUrl);
-
     } catch (error) {
       alert(`오류가 발생했습니다: ${error.message}`);
-      setShortUrl(''); // 오류 발생 시 이전 결과값 초기화
+      setShortUrl('');
     }
   };
 
   const handleCopy = () => {
-    // 3. 복사할 대상도 'shortUrl'로 변경합니다.
     navigator.clipboard.writeText(shortUrl);
     alert('링크가 복사되었습니다!');
   };
   
-  // 카카오 공유 기능 등은 그대로 유지합니다. (필요에 따라 수정 가능)
-  // App.js
-  const shareKakao = () => {
-  if (!window.Kakao || !shortUrl) {
-    alert('먼저 URL을 단축해주세요.');
-    return;
-  }
+  // shareKakao 함수를 아래와 같이 수정합니다.
+  const shareKakao = async () => {
+    if (!shortUrl || !originalLink) {
+      alert('먼저 URL을 단축해주세요.');
+      return;
+    }
+    if (!window.Kakao) return alert('카카오 SDK 로딩 실패');
 
-  window.Kakao.Link.sendDefault({
-    objectType: 'feed',
-    // 미리보기 내용을 직접 지정합니다.
-    content: {
-      title: '단축된 링크가 도착했어요!',
-      description: '아래 버튼을 눌러 링크를 확인해 보세요.',
-      // 서비스의 로고나 대표 이미지를 사용합니다.
-      imageUrl: 'https://linkedin-link-shortener.vercel.app/og-image.png',
-      link: {
-        mobileWebUrl: shortUrl,
-        webUrl: shortUrl,
-      },
-    },
-    buttons: [
-      {
-        title: '링크드인 콘텐츠 읽기',
-        link: {
-          mobileWebUrl: shortUrl,
-          webUrl: shortUrl,
+    try {
+      // 1. 우리 서버의 get-preview API에 원본 링크의 미리보기 정보를 요청합니다.
+      const response = await fetch(`/api/get-preview?url=${encodeURIComponent(originalLink)}`);
+      const preview = await response.json();
+
+      if (!response.ok) {
+        throw new Error(preview.message || '미리보기 정보를 가져올 수 없습니다.');
+      }
+
+      // 2. 받아온 미리보기 정보 + 단축 URL 조합으로 카카오톡 메시지를 보냅니다.
+      window.Kakao.Link.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: preview.title || '공유된 링크',
+          description: preview.description || '내용을 확인해보세요.',
+          imageUrl: preview.imageUrl || 'https://linkedin-link-shortener.vercel.app/og-image.png',
+          link: {
+            mobileWebUrl: shortUrl, // 링크는 단축 URL
+            webUrl: shortUrl,       // 링크는 단축 URL
+          },
         },
-      },
-    ],
-  });
-};
+        buttons: [
+          {
+            title: '게시물 보러가기',
+            link: {
+              mobileWebUrl: shortUrl, // 버튼 링크도 단축 URL
+              webUrl: shortUrl,       // 버튼 링크도 단축 URL
+            },
+          },
+        ],
+      });
+    } catch (error) {
+      alert(`카카오톡 공유 중 오류가 발생했습니다: ${error.message}`);
+    }
+  };
 
   const shareUrls = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shortUrl)}`,
@@ -92,18 +88,15 @@ function App() {
     threads: `https://www.threads.net/intent/post?url=${encodeURIComponent(shortUrl)}`
   };
   
-  // --- 아래 JSX 부분(화면 구성)도 일부 수정됩니다. ---
-  
   const shareBtnBase = {
-    padding: '6px 12px', fontSize: 12,
-    borderRadius: 6, textDecoration: 'none',
-    color: '#fff', border: 'none', cursor: 'pointer'
+    padding: '6px 12px', fontSize: 12, borderRadius: 6,
+    textDecoration: 'none', color: '#fff', border: 'none', cursor: 'pointer'
   };
   const shareBtnStyles = {
     facebook: { background: '#4267B2' },
     linkedin: { background: '#0A66C2' },
-    twitter: { background: '##1DA1F2' },
-    threads: { background: '##10141A' }
+    twitter: { background: '#1DA1F2' },
+    threads: { background: '#10141A' }
   };
 
   return (
@@ -112,10 +105,6 @@ function App() {
       <Helmet>
         <title>URL Shortener</title>
         <meta name="description" content="긴 주소를 짧고 공유하기 쉽게 만들어보세요." />
-        <meta property="og:title" content="URL Shortener" />
-        <meta property="og:description" content="긴 주소를 짧고 공유하기 쉽게 만들어보세요." />
-        <meta property="og:image" content="https://linkedin-link-shortener.vercel.app/og-image.png" />
-        <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
       <div style={{ background: '#fff', borderRadius: 16,
                     boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: 32,
@@ -133,13 +122,11 @@ function App() {
           value={originalLink} onChange={e => setOriginalLink(e.target.value)}
           style={{ width: '100%', padding: 12, marginBottom: 12,
                    border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
-        {/* 4. 버튼의 onClick 이벤트에 새로 만든 handleShorten 함수를 연결합니다. */}
         <button onClick={handleShorten}
           style={{ width: '100%', padding: 12, background: '#0a66c2',
                    color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600 }}>
           단축 링크 만들기
         </button>
-        {/* 5. shortUrl이 있을 때만 결과 창을 보여줍니다. */}
         {shortUrl && (
           <div style={{ marginTop: 24 }}>
             <div style={{ padding: 16, border: '1px solid #cce0ff',
@@ -154,7 +141,6 @@ function App() {
                 복사
               </button>
             </div>
-            {/* 소셜 공유 버튼들은 shortUrl을 사용하도록 이미 수정되어 있습니다. */}
             <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               <button onClick={shareKakao}
                 style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
@@ -164,7 +150,18 @@ function App() {
                 style={{ ...shareBtnBase, ...shareBtnStyles.facebook }}>
                 Facebook
               </a>
-              {/* Other social media links */}
+              <a href={shareUrls.linkedin} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
+                LinkedIn
+              </a>
+              <a href={shareUrls.twitter} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>
+                Twitter
+              </a>
+              <a href={shareUrls.threads} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>
+                Threads
+              </a>
             </div>
           </div>
         )}
