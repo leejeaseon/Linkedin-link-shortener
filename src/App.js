@@ -89,7 +89,7 @@ function App() {
     <div style={{ background: '#f3f2ef', minHeight: '100vh', display: 'flex',
                   justifyContent: 'center', alignItems: 'center', padding: 24 }}>
       <Helmet>
-        <title>URL Shortener</title>
+        <title>Linkedn tips</title>
         <meta name="description" content="긴 주소를 짧고 공유하기 쉽게 만들어보세요." />
         {/* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */}
         {/* 1. 여기에 <style> 태그를 추가하여 호버 효과를 정의합니다. */}
