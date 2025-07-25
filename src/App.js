@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// 1. 여기서 { Linkedin } import를 제거했습니다.
 import { Helmet } from 'react-helmet';
 
 function App() {
@@ -86,11 +85,15 @@ function App() {
   };
 
   return (
-    <div style={{ background: '#f3f2ef', minHeight: '100vh', display: 'flex',
+    // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+    // 이 div의 background 속성을 그라데이션으로 변경합니다.
+    <div style={{ background: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)', 
+                  minHeight: '100vh', display: 'flex',
                   justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+    {/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */}
       <Helmet>
-        <title>Linkedn Tips</title>
-        <meta name="description" content="긴 링크드인 주소를 짧고 공유하기 쉽게 만들어보세요." />
+        <title>URL Shortener</title>
+        <meta name="description" content="긴 주소를 짧고 공유하기 쉽게 만들어보세요." />
         <style>
           {`
             .btn-shorten:hover { background-color: #ff4757 !important; }
@@ -106,13 +109,12 @@ function App() {
                     boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: 32,
                     maxWidth: 500, width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-          {/* 2. 여기서 <Linkedin ... /> 컴포넌트 라인을 삭제했습니다. */}
           <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>
-            Linkedn Tips
+            URL Shortener
           </h1>
         </div>
         <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
-          긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
+          긴 URL을 짧은 주소로 만들어 공유해 보세요.
         </p>
         <input type="text" placeholder="여기에 긴 URL을 붙여넣으세요"
           value={originalLink} onChange={e => setOriginalLink(e.target.value)}
