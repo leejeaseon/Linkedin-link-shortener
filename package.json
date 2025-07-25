@@ -9,7 +9,7 @@
     "lucide-react": "^0.321.0",
     "react-helmet": "^6.1.0",
     "@vercel/kv": "^1.0.1",
-    "nanoid": "^5.0.0"
+    "nanoid": "^3.3.7"
 },
   "scripts": {
     "start": "react-scripts start",
