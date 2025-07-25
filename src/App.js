@@ -29,19 +29,10 @@ function App() {
 
   const shareKakao = () => {
     if (!window.Kakao) return alert('카카오 SDK 로딩 실패');
-    window.Kakao.Link.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: 'LinkedIn 링크 클리너',
-        description: '공유할 링크를 단축된 링크(cleanLink)로 설정했습니다.',
-        imageUrl: 'https://linkedin-link-shortener.vercel.app/og-image.png',
-        link: { mobileWebUrl: cleanLink, webUrl: cleanLink }
-      },
-      buttons: [
-        { title: '링크 확인하기', link: { mobileWebUrl: cleanLink, webUrl: cleanLink } }
-      ]
-    });
-  };
+    window.Kakao.Link.sendScrap({
+      requestUrl: cleanLink,
+  });
+};
 
   const shareUrls = {
     facebook: \`https://www.facebook.com/sharer/sharer.php?u=\${encodeURIComponent(cleanLink)}\`,
