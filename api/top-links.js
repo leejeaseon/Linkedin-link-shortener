@@ -6,7 +6,6 @@ export default async function handler(request, response) {
   }
 
   try {
-    // 1. 데이터베이스의 모든 키(단축 코드)를 스캔하여 가져옵니다.
     const keys = [];
     for await (const key of kv.scanIterator()) {
       keys.push(key);
@@ -16,19 +15,28 @@ export default async function handler(request, response) {
       return response.status(200).json([]);
     }
 
-    // 2. 모든 키에 해당하는 데이터(URL, 클릭 수)를 한 번에 가져옵니다.
     const multiGet = await kv.mget(...keys);
 
-    // 3. 클릭 수(clicks)를 기준으로 내림차순 정렬합니다.
+    // ▼▼▼ 이번 주 월요일 0시 타임스탬프를 계산하는 로직 추가 ▼▼▼
+    const now = new Date();
+    const dayOfWeek = now.getDay(); // 0(일요일) ~ 6(토요일)
+    const distanceToMonday = (dayOfWeek === 0) ? 6 : dayOfWeek - 1; // 월요일까지의 날짜 차이
+    
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - distanceToMonday);
+    startOfWeek.setHours(0, 0, 0, 0); // 월요일 0시 0분 0초
+    const startOfWeekTimestamp = startOfWeek.getTime();
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
     const sortedLinks = multiGet
       .map((linkData, index) => ({
         shortCode: keys[index],
-        ...linkData, // url, clicks 포함
+        ...linkData,
       }))
-      .filter(item => typeof item.clicks === 'number') // 클릭 수 데이터가 있는 것만 필터링
+      // ▼▼▼ 이번 주에 생성된 링크만 필터링하는 조건 추가 ▼▼▼
+      .filter(item => typeof item.clicks === 'number' && item.createdAt >= startOfWeekTimestamp)
       .sort((a, b) => b.clicks - a.clicks);
 
-    // 4. 상위 10개만 잘라서 반환합니다.
     const top10 = sortedLinks.slice(0, 10);
     
     return response.status(200).json(top10);
