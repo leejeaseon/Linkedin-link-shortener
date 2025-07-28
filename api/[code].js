@@ -73,7 +73,7 @@ export default async function handler(request, response) {
       }
       
       // 클릭 수 업데이트 후 리디렉션합니다.
-      return response.redirect(301, longUrl);
+      return response.redirect(longUrl);
     }
 
   } catch (error) {
