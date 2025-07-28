@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { X } from 'lucide-react';
+import { X, RefreshCw } from 'lucide-react'; // RefreshCw 아이콘 추가
 
 function App() {
   const [originalLink, setOriginalLink] = useState('');
   const [shortUrl, setShortUrl] = useState('');
+  const [clickCount, setClickCount] = useState(null); // 클릭 수를 저장할 상태 추가
 
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
@@ -21,6 +22,9 @@ function App() {
       alert('URL을 입력해주세요.');
       return;
     }
+    // 이전 결과 초기화
+    setShortUrl('');
+    setClickCount(null);
     try {
       const response = await fetch('/api/shorten', {
         method: 'POST',
@@ -29,10 +33,11 @@ function App() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || '알 수 없는 오류');
+      
       setShortUrl(data.shortUrl);
+      setClickCount(0); // 생성 직후에는 클릭 수 0
     } catch (error) {
       alert(`오류가 발생했습니다: ${error.message}`);
-      setShortUrl('');
     }
   };
 
@@ -45,6 +50,24 @@ function App() {
     const serviceUrl = 'https://linkedntips.com';
     navigator.clipboard.writeText(serviceUrl);
     alert('서비스 링크가 복사되었습니다!');
+  };
+
+  // 클릭 수를 서버에서 가져오는 함수 추가
+  const fetchClickCount = async () => {
+    if (!shortUrl) return;
+    try {
+      const shortCode = shortUrl.split('/').pop();
+      const response = await fetch(`/api/stats?code=${shortCode}`);
+      const data = await response.json();
+      if (response.ok) {
+        setClickCount(data.clicks);
+      } else {
+        throw new Error(data.message || '클릭 수를 가져오지 못했습니다.');
+      }
+    } catch (error) {
+      console.error("클릭 수를 가져오는 데 실패했습니다.", error);
+      alert(error.message);
+    }
   };
   
   const shareKakao = async () => {
@@ -100,31 +123,22 @@ function App() {
                   minHeight: '100vh', display: 'flex',
                   justifyContent: 'center', alignItems: 'center', padding: 24 }}>
       <Helmet>
-        {/* 기본 정보 */}
         <title>Linkedn Tips | 깔끔한 링크드인 URL 단축 서비스</title>
         <meta name="description" content="복잡하고 긴 링크드인(LinkedIn) 게시물 주소를 공유하기 쉬운 짧은 URL로 변환하세요. 소셜 미디어 공유 시 깔끔한 미리보기를 제공합니다." />
         <meta name="keywords" content="링크드인, URL 단축, 링크 줄이기, 소셜 미디어 공유, URL shortener, LinkedIn" />
-        <meta name="theme-color" content="#8ec5fc" />  
+        <meta name="theme-color" content="#8ec5fc" />
         <link rel="canonical" href="https://linkedntips.com" />
-
-        {/* 검색엔진 소유권 확인 (직접 발급받아 content에 입력해야 합니다) */}
         <meta name="naver-site-verification" content="d9b8f1f0581f7751c9c98596397d0c3ce0293a98" />
         <meta name="google-site-verification" content="여기에 구글 서치 콘솔 인증 코드를 입력하세요" />
-    
-        {/* 소셜 미디어 공유 (Open Graph & Twitter) */}
-        {/* ▼▼▼ 'og:type' 내용을 'website'로 수정했습니다. ▼▼▼ */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Linkedn Tips | URL 단축 서비스" />
         <meta property="og:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
         <meta property="og:url" content="https://linkedntips.com" />
         <meta property="og:image" content="https://linkedntips.com/logo.png" />
-        
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Linkedn Tips | URL 단축 서비스" />
         <meta name="twitter:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
         <meta name="twitter:image" content="https://linkedntips.com/logo.png" />
-
-        {/* 반응형 웹을 위한 뷰포트 설정 */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script type="application/ld+json">
           {`
@@ -145,38 +159,18 @@ function App() {
         </script>
         <style>
           {`
-            html, body {
-              margin: 0;
-              padding: 0;
-              width: 100%;
-              height: 100%;
-            }
+            html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
             .btn-shorten:hover { background-color: #ff4757 !important; }
             .btn-copy:hover { background-color: #2f3542 !important; color: white !important; }
             .btn-kakao:hover { background-color: #fbe500 !important; filter: brightness(0.9); }
             .btn-linkedin:hover { background-color: #004182 !important; }
             .btn-twitter:hover { background-color: #0c8de4 !important; }
             .btn-threads:hover { background-color: #444444 !important; }
-            .btn-share-service:hover { 
-              background-color: #1971c2 !important;
-              color: #ffffff !important;
-            }
-            .input-wrapper {
-              position: relative;
-              width: 100%;
-              margin-bottom: 12px;
-            }
-            .clear-icon {
-              position: absolute;
-              right: 12px;
-              top: 50%;
-              transform: translateY(-50%);
-              cursor: pointer;
-              color: #999;
-            }
-            .clear-icon:hover {
-              color: #333;
-            }
+            .btn-share-service:hover { background-color: #1971c2 !important; color: #ffffff !important; }
+            .input-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
+            .clear-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #999; }
+            .clear-icon:hover { color: #333; }
+            .refresh-icon:hover { color: #333 !important; }
           `}
         </style>
       </Helmet>
@@ -191,7 +185,6 @@ function App() {
         <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
           긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
         </p>
-        
         <div className="input-wrapper">
           <input type="text" placeholder="여기에 링크드인 URL을 붙여넣으세요"
             value={originalLink} onChange={e => setOriginalLink(e.target.value)}
@@ -201,7 +194,6 @@ function App() {
             <X className="clear-icon" size={20} onClick={handleClearInput} />
           )}
         </div>
-        
         <button
           className="btn-shorten"
           onClick={handleShorten}
@@ -210,7 +202,6 @@ function App() {
                    cursor: 'pointer' }}>
           링크 이쁘게 줄이기
         </button>
-
         <button
           className="btn-share-service"
           onClick={handleShareService}
@@ -234,10 +225,18 @@ function App() {
                 className="btn-copy"
                 onClick={handleCopy}
                 style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none',
-                         cursor: 'pointer' }}>
+                         cursor: 'pointer', marginLeft: '16px' }}>
                 복사
               </button>
             </div>
+            
+            <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', fontSize: '14px', color: '#555' }}>
+              <span>
+                {clickCount !== null ? `클릭 수: ${clickCount}` : ''}
+              </span>
+              <RefreshCw className="refresh-icon" size={16} onClick={fetchClickCount} style={{ marginLeft: '8px', cursor: 'pointer', color: '#888' }} />
+            </div>
+
             <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
               <button
                 className="btn-kakao"
@@ -266,12 +265,10 @@ function App() {
             </div>
           </div>
         )}
-
-        {/* ▼▼▼▼▼ 푸터를 추가했습니다. ▼▼▼▼▼ */}
+        
         <footer style={{ textAlign: 'center', marginTop: '40px', padding: '20px 0 0 0', color: '#777', fontSize: '12px', borderTop: '1px solid #eee' }}>
           made by <a href="https://www.linkedin.com/in/homecorner-mkt/" target="_blank" rel="noopener noreferrer" style={{ color: '#0a66c2', textDecoration: 'none', fontWeight: 'bold' }}>집구석마케터</a>
         </footer>
-        {/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */}
         
       </div>
     </div>
