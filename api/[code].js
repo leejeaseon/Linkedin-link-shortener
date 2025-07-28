@@ -5,20 +5,10 @@ export default async function handler(request, response) {
   const userAgent = request.headers['user-agent'];
 
   try {
-    const dataString = await kv.get(code);
-    if (!dataString) {
+    // DB에서 원본 URL(문자열)을 바로 가져옵니다.
+    const longUrl = await kv.get(code); 
+    if (!longUrl) {
       return response.status(404).send('Not Found');
-    }
-
-    let linkData;
-    let longUrl;
-
-    try {
-      linkData = JSON.parse(dataString);
-      longUrl = linkData.url;
-    } catch (e) {
-      linkData = null;
-      longUrl = dataString;
     }
 
     const isScraper = /kakaotalk|facebook|twitter|slack|Discordbot|opengraph/i.test(userAgent);
@@ -61,12 +51,7 @@ export default async function handler(request, response) {
       return response.status(200).send(htmlResponse);
 
     } else {
-      if (linkData) {
-        linkData.clicks = (linkData.clicks || 0) + 1;
-        await kv.set(code, JSON.stringify(linkData));
-      }
-      
-      // ▼▼▼ 리디렉션 방식을 헤더 설정으로 변경했습니다. ▼▼▼
+      // 일반 사용자 접속 시 바로 리디렉션합니다.
       response.setHeader('Location', longUrl);
       return response.status(302).end();
     }
