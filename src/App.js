@@ -109,9 +109,11 @@ function App() {
 
         {/* 검색엔진 소유권 확인 (직접 발급받아 content에 입력해야 합니다) */}
         <meta name="naver-site-verification" content="d9b8f1f0581f7751c9c98596397d0c3ce0293a98" />
-  
+        <meta name="google-site-verification" content="여기에 구글 서치 콘솔 인증 코드를 입력하세요" />
+    
         {/* 소셜 미디어 공유 (Open Graph & Twitter) */}
-        <meta property="og:type" content="https://linkedntips.com" />
+        {/* ▼▼▼ 'og:type' 내용을 'website'로 수정했습니다. ▼▼▼ */}
+        <meta property="og:type" content="website" />
         <meta property="og:title" content="Linkedn Tips | URL 단축 서비스" />
         <meta property="og:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
         <meta property="og:url" content="https://linkedntips.com" />
@@ -162,7 +164,6 @@ function App() {
             .input-wrapper {
               position: relative;
               width: 100%;
-              /* ▼▼▼ 이 div에 marginBottom을 추가합니다. ▼▼▼ */
               margin-bottom: 12px;
             }
             .clear-icon {
@@ -192,7 +193,6 @@ function App() {
         </p>
         
         <div className="input-wrapper">
-          {/* ▼▼▼ input에서는 marginBottom을 제거합니다. ▼▼▼ */}
           <input type="text" placeholder="여기에 링크드인 URL을 붙여넣으세요"
             value={originalLink} onChange={e => setOriginalLink(e.target.value)}
             style={{ width: '100%', padding: '12px 40px 12px 12px',
@@ -266,6 +266,13 @@ function App() {
             </div>
           </div>
         )}
+
+        {/* ▼▼▼▼▼ 푸터를 추가했습니다. ▼▼▼▼▼ */}
+        <footer style={{ textAlign: 'center', marginTop: '40px', padding: '20px 0 0 0', color: '#777', fontSize: '12px', borderTop: '1px solid #eee' }}>
+          made by <a href="https://www.linkedin.com/in/homecorner-mkt/" target="_blank" rel="noopener noreferrer" style={{ color: '#0a66c2', textDecoration: 'none', fontWeight: 'bold' }}>집구석마케터</a>
+        </footer>
+        {/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */}
+        
       </div>
     </div>
   );
