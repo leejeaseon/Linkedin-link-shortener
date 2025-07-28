@@ -14,8 +14,11 @@ export default async function handler(request, response) {
 
     const shortCode = nanoid(7);
 
-    // 데이터베이스에 원본 URL만 문자열로 저장합니다.
-    await kv.set(shortCode, longUrl);
+    const linkData = {
+      url: longUrl,
+      clicks: 0,
+    };
+    await kv.set(shortCode, JSON.stringify(linkData));
 
     const shortUrl = `https://${request.headers.host}/${shortCode}`;
 
