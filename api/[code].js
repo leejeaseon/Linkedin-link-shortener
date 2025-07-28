@@ -5,12 +5,12 @@ export default async function handler(request, response) {
   const userAgent = request.headers['user-agent'];
 
   try {
-    const dataString = await kv.get(code);
-    if (!dataString) {
+    // ▼▼▼ .get()으로 바로 객체를 가져오고, JSON.parse를 삭제했습니다. ▼▼▼
+    const linkData = await kv.get(code); 
+    if (!linkData) {
       return response.status(404).send('Not Found');
     }
-
-    const linkData = JSON.parse(dataString);
+    
     const longUrl = linkData.url;
 
     const isScraper = /kakaotalk|facebook|twitter|slack|Discordbot|opengraph/i.test(userAgent);
