@@ -108,7 +108,7 @@ function App() {
         <link rel="canonical" href="https://linkedntips.com" />
         <meta name="naver-site-verification" content="d9b8f1f0581f7751c9c98596397d0c3ce0293a98" />
         <meta name="google-site-verification" content="여기에 구글 서치 콘솔 인증 코드를 입력하세요" />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="https://linkedntips.com" />
         <meta property="og:title" content="Linkedn Tips | URL 단축 서비스" />
         <meta property="og:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
         <meta property="og:url" content="https://linkedntips.com" />
@@ -144,4 +144,104 @@ function App() {
             .btn-linkedin:hover { background-color: #004182 !important; }
             .btn-twitter:hover { background-color: #0c8de4 !important; }
             .btn-threads:hover { background-color: #444444 !important; }
-            .btn-share
+            .btn-share-service:hover { background-color: #1971c2 !important; color: #ffffff !important; }
+            .input-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
+            .clear-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #999; }
+            .clear-icon:hover { color: #333; }
+          `}
+        </style>
+      </Helmet>
+      <div style={{ background: '#fff', borderRadius: 16,
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: 32,
+                    maxWidth: 500, width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
+          <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>
+            Linkedn Tips
+          </h1>
+        </div>
+        <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
+          긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
+        </p>
+        <div className="input-wrapper">
+          <input type="text" placeholder="여기에 링크드인 URL을 붙여넣으세요"
+            value={originalLink} onChange={e => setOriginalLink(e.target.value)}
+            style={{ width: '100%', padding: '12px 40px 12px 12px',
+                     border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
+          {originalLink && (
+            <X className="clear-icon" size={20} onClick={handleClearInput} />
+          )}
+        </div>
+        <button
+          className="btn-shorten"
+          onClick={handleShorten}
+          style={{ width: '100%', padding: 12, background: '#0a66c2',
+                   color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
+                   cursor: 'pointer' }}>
+          링크 이쁘게 줄이기
+        </button>
+        <button
+          className="btn-share-service"
+          onClick={handleShareService}
+          style={{ width: '100%', padding: 10, background: '#e7f5ff', 
+                   color: '#1971c2', border: '1px solid #a5d8ff', 
+                   borderRadius: 8, fontWeight: 600,
+                   cursor: 'pointer', marginTop: '8px' }}>
+          이 서비스 공유하기
+        </button>
+
+        {shortUrl && (
+          <div style={{ marginTop: 24 }}>
+            <div style={{ padding: 16, border: '1px solid #cce0ff',
+                          borderRadius: 8, display: 'flex', alignItems: 'center',
+                          justifyContent: 'space-between' }}>
+              <a href={shortUrl} target="_blank" rel="noreferrer"
+                style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>
+                {shortUrl}
+              </a>
+              <button
+                className="btn-copy"
+                onClick={handleCopy}
+                style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none',
+                         cursor: 'pointer', marginLeft: '16px' }}>
+                복사
+              </button>
+            </div>
+            <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <button
+                className="btn-kakao"
+                onClick={shareKakao}
+                style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
+                카카오톡 공유
+              </button>
+              <a
+                className="btn-linkedin"
+                href={shareUrls.linkedin} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
+                LinkedIn
+              </a>
+              <a
+                className="btn-twitter"
+                href={shareUrls.twitter} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>
+                Twitter
+              </a>
+              <a
+                className="btn-threads"
+                href={shareUrls.threads} target="_blank" rel="noreferrer"
+                style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>
+                Threads
+              </a>
+            </div>
+          </div>
+        )}
+        
+        <footer style={{ textAlign: 'center', marginTop: '40px', padding: '20px 0 0 0', color: '#777', fontSize: '12px', borderTop: '1px solid #eee' }}>
+          made by <a href="https://www.linkedin.com/in/homecorner-mkt/" target="_blank" rel="noopener noreferrer" style={{ color: '#0a66c2', textDecoration: 'none', fontWeight: 'bold' }}>집구석마케터</a>
+        </footer>
+        
+      </div>
+    </div>
+  );
+}
+
+export default App;
