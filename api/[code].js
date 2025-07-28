@@ -66,8 +66,9 @@ export default async function handler(request, response) {
         await kv.set(code, JSON.stringify(linkData));
       }
       
-      // ▼▼▼ 이 부분을 수정했습니다. ▼▼▼
-      return response.redirect(longUrl);
+      // ▼▼▼ 리디렉션 방식을 헤더 설정으로 변경했습니다. ▼▼▼
+      response.setHeader('Location', longUrl);
+      return response.status(302).end();
     }
 
   } catch (error) {
