@@ -14,7 +14,7 @@ export default async function handler(request, response) {
 
     const shortCode = nanoid(7);
 
-    // ▼▼▼ 데이터베이스에 URL과 함께 클릭 수(clicks: 0)를 객체 형태로 저장합니다. ▼▼▼
+    // 데이터베이스에 URL과 함께 클릭 수(clicks: 0)를 객체 형태로 저장합니다.
     const linkData = {
       url: longUrl,
       clicks: 0,
