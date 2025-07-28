@@ -1,8 +1,20 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/:code([a-zA-Z0-9]{7})",
-      "destination": "/api/:code"
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*\\..*)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/:code([a-zA-Z0-9]{7})",
+      "dest": "/api/:code"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
