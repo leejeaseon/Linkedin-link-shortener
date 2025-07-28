@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { X } from 'lucide-react';
+import { X, RefreshCw } from 'lucide-react';
 
 function App() {
   const [originalLink, setOriginalLink] = useState('');
   const [shortUrl, setShortUrl] = useState('');
+  const [clickCount, setClickCount] = useState(null);
 
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
@@ -21,7 +22,8 @@ function App() {
       alert('URL을 입력해주세요.');
       return;
     }
-    setShortUrl(''); // 이전 결과 초기화
+    setShortUrl('');
+    setClickCount(null);
     try {
       const response = await fetch('/api/shorten', {
         method: 'POST',
@@ -32,6 +34,7 @@ function App() {
       if (!response.ok) throw new Error(data.message || '알 수 없는 오류');
       
       setShortUrl(data.shortUrl);
+      setClickCount(0);
     } catch (error) {
       alert(`오류가 발생했습니다: ${error.message}`);
     }
@@ -46,6 +49,23 @@ function App() {
     const serviceUrl = 'https://linkedntips.com';
     navigator.clipboard.writeText(serviceUrl);
     alert('서비스 링크가 복사되었습니다!');
+  };
+
+  const fetchClickCount = async () => {
+    if (!shortUrl) return;
+    try {
+      const shortCode = shortUrl.split('/').pop();
+      const response = await fetch(`/api/stats?code=${shortCode}`);
+      const data = await response.json();
+      if (response.ok) {
+        setClickCount(data.clicks);
+      } else {
+        throw new Error(data.message || '클릭 수를 가져오지 못했습니다.');
+      }
+    } catch (error) {
+      console.error("클릭 수를 가져오는 데 실패했습니다.", error);
+      alert(error.message);
+    }
   };
   
   const shareKakao = async () => {
@@ -107,7 +127,8 @@ function App() {
         <meta name="theme-color" content="#8ec5fc" />
         <link rel="canonical" href="https://linkedntips.com" />
         <meta name="naver-site-verification" content="d9b8f1f0581f7751c9c98596397d0c3ce0293a98" />
-        <meta property="og:type" content="https://linkedntips.com" />
+        <meta name="google-site-verification" content="여기에 구글 서치 콘솔 인증 코드를 입력하세요" />
+        <meta property="og:type" content="website" />
         <meta property="og:title" content="Linkedn Tips | URL 단축 서비스" />
         <meta property="og:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
         <meta property="og:url" content="https://linkedntips.com" />
@@ -147,6 +168,7 @@ function App() {
             .input-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
             .clear-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #999; }
             .clear-icon:hover { color: #333; }
+            .refresh-icon:hover { color: #333 !important; }
           `}
         </style>
       </Helmet>
@@ -205,6 +227,14 @@ function App() {
                 복사
               </button>
             </div>
+            
+            <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', fontSize: '14px', color: '#555' }}>
+              <span>
+                {clickCount !== null ? `클릭 수: ${clickCount}` : ''}
+              </span>
+              <RefreshCw className="refresh-icon" size={16} onClick={fetchClickCount} style={{ marginLeft: '8px', cursor: 'pointer', color: '#888' }} />
+            </div>
+
             <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
               <button
                 className="btn-kakao"
