@@ -115,12 +115,12 @@ function App() {
         <meta property="og:title" content="Linkedn Tips | URL 단축 서비스" />
         <meta property="og:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
         <meta property="og:url" content="https://linkedntips.com" />
-        <meta property="og:image" content="https://linkedntips.com/og-image.png" />
+        <meta property="og:image" content="https://linkedntips.com/logo.png" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Linkedn Tips | URL 단축 서비스" />
         <meta name="twitter:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
-        <meta name="twitter:image" content="https://linkedntips.com/og-image.png" />
+        <meta name="twitter:image" content="https://linkedntips.com/logo.png" />
 
         {/* 반응형 웹을 위한 뷰포트 설정 */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
