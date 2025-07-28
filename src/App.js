@@ -123,7 +123,23 @@ function App() {
 
         {/* 반응형 웹을 위한 뷰포트 설정 */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-  
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "Linkedn Tips",
+              "description": "복잡하고 긴 링크드인(LinkedIn) 게시물 주소를 공유하기 쉬운 짧은 URL로 변환하는 서비스입니다.",
+              "url": "https://linkedntips.com",
+              "applicationCategory": "Utilities",
+              "operatingSystem": "Any",
+              "offers": {
+                "@type": "Offer",
+                "price": "0"
+              }
+            }
+          `}
+        </script>
         <style>
           {`
             html, body {
