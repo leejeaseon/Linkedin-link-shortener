@@ -14,9 +14,11 @@ export default async function handler(request, response) {
 
     const shortCode = nanoid(7);
 
+    // ▼▼▼ 데이터에 생성 날짜(createdAt)를 추가합니다. ▼▼▼
     const linkData = {
       url: longUrl,
       clicks: 0,
+      createdAt: Date.now(), // 현재 시간을 숫자로 저장
     };
     await kv.set(shortCode, JSON.stringify(linkData));
 
