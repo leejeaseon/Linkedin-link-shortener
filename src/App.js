@@ -107,7 +107,6 @@ function App() {
         <meta name="theme-color" content="#8ec5fc" />
         <link rel="canonical" href="https://linkedntips.com" />
         <meta name="naver-site-verification" content="d9b8f1f0581f7751c9c98596397d0c3ce0293a98" />
-        <meta name="google-site-verification" content="여기에 구글 서치 콘솔 인증 코드를 입력하세요" />
         <meta property="og:type" content="https://linkedntips.com" />
         <meta property="og:title" content="Linkedn Tips | URL 단축 서비스" />
         <meta property="og:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
