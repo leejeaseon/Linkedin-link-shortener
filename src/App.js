@@ -110,7 +110,7 @@ function App() {
         <meta name="naver-site-verification" content="d9b8f1f0581f7751c9c98596397d0c3ce0293a98" />
   
         {/* 소셜 미디어 공유 (Open Graph & Twitter) */}
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="https://linkedntips.com" />
         <meta property="og:title" content="Linkedn Tips | URL 단축 서비스" />
         <meta property="og:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
         <meta property="og:url" content="https://linkedntips.com" />
