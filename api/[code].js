@@ -5,11 +5,13 @@ export default async function handler(request, response) {
   const userAgent = request.headers['user-agent'];
 
   try {
-    // DB에서 원본 URL(문자열)을 바로 가져옵니다.
-    const longUrl = await kv.get(code); 
-    if (!longUrl) {
+    const dataString = await kv.get(code);
+    if (!dataString) {
       return response.status(404).send('Not Found');
     }
+
+    const linkData = JSON.parse(dataString);
+    const longUrl = linkData.url;
 
     const isScraper = /kakaotalk|facebook|twitter|slack|Discordbot|opengraph/i.test(userAgent);
 
@@ -51,7 +53,9 @@ export default async function handler(request, response) {
       return response.status(200).send(htmlResponse);
 
     } else {
-      // 일반 사용자 접속 시 바로 리디렉션합니다.
+      linkData.clicks = (linkData.clicks || 0) + 1;
+      await kv.set(code, JSON.stringify(linkData));
+      
       response.setHeader('Location', longUrl);
       return response.status(302).end();
     }
