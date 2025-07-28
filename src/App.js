@@ -6,8 +6,24 @@ function App() {
   const [originalLink, setOriginalLink] = useState('');
   const [shortUrl, setShortUrl] = useState('');
   const [clickCount, setClickCount] = useState(null);
+  const [topLinks, setTopLinks] = useState([]); // Top 10 링크를 저장할 상태 추가
 
+  // 앱이 처음 로딩될 때 Top 10 링크를 서버에서 가져옵니다.
   useEffect(() => {
+    const fetchTopLinks = async () => {
+      try {
+        const response = await fetch('/api/top-links');
+        const data = await response.json();
+        if (response.ok) {
+          setTopLinks(data);
+        }
+      } catch (error) {
+        console.error("Top 10 링크를 가져오는 데 실패했습니다.", error);
+      }
+    };
+
+    fetchTopLinks();
+
     if (window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.REACT_APP_KAKAO_KEY);
     }
@@ -119,7 +135,7 @@ function App() {
   return (
     <div style={{ background: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)', 
                   minHeight: '100vh', display: 'flex',
-                  justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+                  justifyContent: 'center', alignItems: 'center', padding: '24px', boxSizing: 'border-box' }}>
       <Helmet>
         <title>Linkedn Tips | 깔끔한 링크드인 URL 단축 서비스</title>
         <meta name="description" content="복잡하고 긴 링크드인(LinkedIn) 게시물 주소를 공유하기 쉬운 짧은 URL로 변환하세요. 소셜 미디어 공유 시 깔끔한 미리보기를 제공합니다." />
@@ -172,102 +188,137 @@ function App() {
           `}
         </style>
       </Helmet>
-      <div style={{ background: '#fff', borderRadius: 16,
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: 32,
-                    maxWidth: 500, width: '100%', boxSizing: 'border-box' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-          <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>
-            Linkedn Tips
-          </h1>
-        </div>
-        <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
-          긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
-        </p>
-        <div className="input-wrapper">
-          <input type="text" placeholder="여기에 링크드인 URL을 붙여넣으세요"
-            value={originalLink} onChange={e => setOriginalLink(e.target.value)}
-            style={{ width: '100%', padding: '12px 40px 12px 12px',
-                     border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
-          {originalLink && (
-            <X className="clear-icon" size={20} onClick={handleClearInput} />
-          )}
-        </div>
-        <button
-          className="btn-shorten"
-          onClick={handleShorten}
-          style={{ width: '100%', padding: 12, background: '#0a66c2',
-                   color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
-                   cursor: 'pointer' }}>
-          링크 이쁘게 줄이기
-        </button>
-        <button
-          className="btn-share-service"
-          onClick={handleShareService}
-          style={{ width: '100%', padding: 10, background: '#e7f5ff', 
-                   color: '#1971c2', border: '1px solid #a5d8ff', 
-                   borderRadius: 8, fontWeight: 600,
-                   cursor: 'pointer', marginTop: '8px' }}>
-          이 서비스 공유하기
-        </button>
-
-        {shortUrl && (
-          <div style={{ marginTop: 24 }}>
-            <div style={{ padding: 16, border: '1px solid #cce0ff',
-                          borderRadius: 8, display: 'flex', alignItems: 'center',
-                          justifyContent: 'space-between' }}>
-              <a href={shortUrl} target="_blank" rel="noreferrer"
-                style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>
-                {shortUrl}
-              </a>
-              <button
-                className="btn-copy"
-                onClick={handleCopy}
-                style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none',
-                         cursor: 'pointer', marginLeft: '16px' }}>
-                복사
-              </button>
-            </div>
-            
-            <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', fontSize: '14px', color: '#555' }}>
-              <span>
-                {clickCount !== null ? `클릭 수: ${clickCount}` : ''}
-              </span>
-              <RefreshCw className="refresh-icon" size={16} onClick={fetchClickCount} style={{ marginLeft: '8px', cursor: 'pointer', color: '#888' }} />
-            </div>
-
-            <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <button
-                className="btn-kakao"
-                onClick={shareKakao}
-                style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
-                카카오톡 공유
-              </button>
-              <a
-                className="btn-linkedin"
-                href={shareUrls.linkedin} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
-                LinkedIn
-              </a>
-              <a
-                className="btn-twitter"
-                href={shareUrls.twitter} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>
-                Twitter
-              </a>
-              <a
-                className="btn-threads"
-                href={shareUrls.threads} target="_blank" rel="noreferrer"
-                style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>
-                Threads
-              </a>
-            </div>
+      
+      <div style={{ display: 'flex', gap: '24px', width: '100%', maxWidth: '1000px', alignItems: 'flex-start' }}>
+        
+        {/* 왼쪽 컬럼: 기존 URL 단축기 */}
+        <div style={{ background: '#fff', borderRadius: 16,
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: 32,
+                      width: '100%', boxSizing: 'border-box', flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
+            <h1 style={{ fontSize: 20, fontWeight: 600, color: '#0a66c2', margin: 0 }}>
+              Linkedn Tips
+            </h1>
           </div>
-        )}
-        
-        <footer style={{ textAlign: 'center', marginTop: '40px', padding: '20px 0 0 0', color: '#777', fontSize: '12px', borderTop: '1px solid #eee' }}>
-          made by <a href="https://www.linkedin.com/in/homecorner-mkt/" target="_blank" rel="noopener noreferrer" style={{ color: '#0a66c2', textDecoration: 'none', fontWeight: 'bold' }}>집구석마케터</a>
-        </footer>
-        
+          <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
+            긴 링크드인 URL을 짧은 주소로 만들어 공유해 보세요.
+          </p>
+          <div className="input-wrapper">
+            <input type="text" placeholder="여기에 링크드인 URL을 붙여넣으세요"
+              value={originalLink} onChange={e => setOriginalLink(e.target.value)}
+              style={{ width: '100%', padding: '12px 40px 12px 12px',
+                       border: '1px solid #ccc', borderRadius: 8, boxSizing: 'border-box' }} />
+            {originalLink && (
+              <X className="clear-icon" size={20} onClick={handleClearInput} />
+            )}
+          </div>
+          <button
+            className="btn-shorten"
+            onClick={handleShorten}
+            style={{ width: '100%', padding: 12, background: '#0a66c2',
+                     color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
+                     cursor: 'pointer' }}>
+            링크 이쁘게 줄이기
+          </button>
+          <button
+            className="btn-share-service"
+            onClick={handleShareService}
+            style={{ width: '100%', padding: 10, background: '#e7f5ff', 
+                     color: '#1971c2', border: '1px solid #a5d8ff', 
+                     borderRadius: 8, fontWeight: 600,
+                     cursor: 'pointer', marginTop: '8px' }}>
+            이 서비스 공유하기
+          </button>
+
+          {shortUrl && (
+            <div style={{ marginTop: 24 }}>
+              <div style={{ padding: 16, border: '1px solid #cce0ff',
+                            borderRadius: 8, display: 'flex', alignItems: 'center',
+                            justifyContent: 'space-between' }}>
+                <a href={shortUrl} target="_blank" rel="noreferrer"
+                  style={{ color: '#0a66c2', wordBreak: 'break-all', flex: 1 }}>
+                  {shortUrl}
+                </a>
+                <button
+                  className="btn-copy"
+                  onClick={handleCopy}
+                  style={{ padding: '6px 12px', background: '#eee', borderRadius: 6, border: 'none',
+                           cursor: 'pointer', marginLeft: '16px' }}>
+                  복사
+                </button>
+              </div>
+              
+              <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', fontSize: '14px', color: '#555' }}>
+                <span>
+                  {clickCount !== null ? `클릭 수: ${clickCount}` : ''}
+                </span>
+                <RefreshCw className="refresh-icon" size={16} onClick={fetchClickCount} style={{ marginLeft: '8px', cursor: 'pointer', color: '#888' }} />
+              </div>
+
+              <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <button
+                  className="btn-kakao"
+                  onClick={shareKakao}
+                  style={{ ...shareBtnBase, background: '#fee500', color: '#191919' }}>
+                  카카오톡 공유
+                </button>
+                <a
+                  className="btn-linkedin"
+                  href={shareUrls.linkedin} target="_blank" rel="noreferrer"
+                  style={{ ...shareBtnBase, ...shareBtnStyles.linkedin }}>
+                  LinkedIn
+                </a>
+                <a
+                  className="btn-twitter"
+                  href={shareUrls.twitter} target="_blank" rel="noreferrer"
+                  style={{ ...shareBtnBase, ...shareBtnStyles.twitter }}>
+                  Twitter
+                </a>
+                <a
+                  className="btn-threads"
+                  href={shareUrls.threads} target="_blank" rel="noreferrer"
+                  style={{ ...shareBtnBase, ...shareBtnStyles.threads }}>
+                  Threads
+                </a>
+              </div>
+            </div>
+          )}
+          
+          <footer style={{ textAlign: 'center', marginTop: '40px', padding: '20px 0 0 0', color: '#777', fontSize: '12px', borderTop: '1px solid #eee' }}>
+            made by <a href="https://www.linkedin.com/in/homecorner-mkt/" target="_blank" rel="noopener noreferrer" style={{ color: '#0a66c2', textDecoration: 'none', fontWeight: 'bold' }}>집구석마케터</a>
+          </footer>
+        </div>
+
+        {/* 오른쪽 컬럼: Top 10 리더보드 */}
+        <div style={{ background: 'rgba(255, 255, 255, 0.9)', borderRadius: 16,
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: '24px 32px',
+                      width: '100%', maxWidth: '400px', boxSizing: 'border-box', flexShrink: 0 }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#0a66c2', margin: '0 0 20px 0', paddingBottom: '12px', borderBottom: '1px solid #eee' }}>
+            Top 10 Clicked Links
+          </h2>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, fontSize: '12px' }}>
+            {topLinks.length > 0 ? (
+              topLinks.map((link) => (
+                <li key={link.shortCode} style={{ marginBottom: '16px', borderBottom: '1px solid #f0f0f0', paddingBottom: '16px', wordBreak: 'break-all' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 'bold', marginBottom: '6px' }}>
+                    <a href={`https://linkedntips.com/${link.shortCode}`} target="_blank" rel="noopener noreferrer" style={{ color: '#0a66c2', textDecoration: 'none' }}>
+                      {`linkedntips.com/${link.shortCode}`}
+                    </a>
+                    <span style={{ background: '#e7f5ff', color: '#1971c2', padding: '2px 6px', borderRadius: '4px', fontSize: '12px', flexShrink: 0, marginLeft: '8px' }}>
+                      {`${link.clicks} clicks`}
+                    </span>
+                  </div>
+                  <div style={{ color: '#777', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {link.url}
+                  </div>
+                </li>
+              ))
+            ) : (
+              <li style={{ color: '#999' }}>아직 집계된 링크가 없습니다.</li>
+            )}
+          </ul>
+        </div>
+
       </div>
     </div>
   );
