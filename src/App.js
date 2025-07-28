@@ -6,9 +6,8 @@ function App() {
   const [originalLink, setOriginalLink] = useState('');
   const [shortUrl, setShortUrl] = useState('');
   const [clickCount, setClickCount] = useState(null);
-  const [topLinks, setTopLinks] = useState([]); // Top 10 링크를 저장할 상태 추가
+  const [topLinks, setTopLinks] = useState([]);
 
-  // 앱이 처음 로딩될 때 Top 10 링크를 서버에서 가져옵니다.
   useEffect(() => {
     const fetchTopLinks = async () => {
       try {
@@ -185,6 +184,13 @@ function App() {
             .clear-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #999; }
             .clear-icon:hover { color: #333; }
             .refresh-icon:hover { color: #333 !important; }
+
+            /* ▼▼▼ 1. 리더보드 스크롤을 위한 스타일 추가 ▼▼▼ */
+            .leaderboard-list {
+              max-height: 350px; /* 5개 항목에 대한 대략적인 최대 높이 */
+              overflow-y: auto;  /* 내용이 넘치면 세로 스크롤바 표시 */
+              padding-right: 8px; /* 스크롤바 공간 확보 */
+            }
           `}
         </style>
       </Helmet>
@@ -294,9 +300,10 @@ function App() {
                       boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: '24px 32px',
                       width: '100%', maxWidth: '400px', boxSizing: 'border-box', flexShrink: 0 }}>
           <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#0a66c2', margin: '0 0 20px 0', paddingBottom: '12px', borderBottom: '1px solid #eee' }}>
-            Top 10 Clicked Links
+            오늘의 링띤 Top10
           </h2>
-          <ul style={{ listStyle: 'none', margin: 0, padding: 0, fontSize: '12px' }}>
+          {/* ▼▼▼ 2. ul 태그에 className을 적용합니다. ▼▼▼ */}
+          <ul className="leaderboard-list" style={{ listStyle: 'none', margin: 0, padding: 0, fontSize: '12px' }}>
             {topLinks.length > 0 ? (
               topLinks.map((link) => (
                 <li key={link.shortCode} style={{ marginBottom: '16px', borderBottom: '1px solid #f0f0f0', paddingBottom: '16px', wordBreak: 'break-all' }}>
@@ -318,7 +325,6 @@ function App() {
             )}
           </ul>
         </div>
-
       </div>
     </div>
   );
