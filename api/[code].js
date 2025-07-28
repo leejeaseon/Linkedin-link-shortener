@@ -10,8 +10,20 @@ export default async function handler(request, response) {
       return response.status(404).send('Not Found');
     }
 
-    const linkData = JSON.parse(dataString);
-    const longUrl = linkData.url;
+    let linkData;
+    let longUrl;
+
+    // ▼▼▼ 데이터가 예전 방식인지, 새로운 방식인지 확인하는 로직 추가 ▼▼▼
+    try {
+      // 새로운 방식(JSON)으로 먼저 분석 시도
+      linkData = JSON.parse(dataString);
+      longUrl = linkData.url;
+    } catch (e) {
+      // 분석에 실패하면 예전 방식(단순 문자열)으로 간주
+      linkData = null; // 클릭 수를 업데이트할 수 없도록 null 처리
+      longUrl = dataString;
+    }
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
     const isScraper = /kakaotalk|facebook|twitter|slack|Discordbot|opengraph/i.test(userAgent);
 
@@ -54,9 +66,11 @@ export default async function handler(request, response) {
       return response.status(200).send(htmlResponse);
 
     } else {
-      // 일반 사용자 접속 시 클릭 수를 1 증가시키고 다시 저장합니다.
-      linkData.clicks = (linkData.clicks || 0) + 1;
-      await kv.set(code, JSON.stringify(linkData));
+      // 일반 사용자 접속 시, 새로운 방식의 데이터일 경우에만 클릭 수를 증가시킵니다.
+      if (linkData) {
+        linkData.clicks = (linkData.clicks || 0) + 1;
+        await kv.set(code, JSON.stringify(linkData));
+      }
       
       // 클릭 수 업데이트 후 리디렉션합니다.
       return response.redirect(301, longUrl);
