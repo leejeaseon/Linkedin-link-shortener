@@ -11,12 +11,11 @@ export default async function handler(request, response) {
       return response.status(400).json({ message: '단축 코드가 필요합니다.' });
     }
 
-    const dataString = await kv.get(code);
-    if (!dataString) {
+    // ▼▼▼ .get()으로 바로 객체를 가져오고, JSON.parse를 삭제했습니다. ▼▼▼
+    const linkData = await kv.get(code);
+    if (!linkData) {
       return response.status(404).json({ message: '데이터를 찾을 수 없습니다.' });
     }
-
-    const linkData = JSON.parse(dataString);
     
     return response.status(200).json({ clicks: linkData.clicks || 0 });
 
