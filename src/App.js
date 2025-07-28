@@ -100,8 +100,30 @@ function App() {
                   minHeight: '100vh', display: 'flex',
                   justifyContent: 'center', alignItems: 'center', padding: 24 }}>
       <Helmet>
-        <title>Linkedn Tips</title>
-        <meta name="description" content="긴 링크드인 주소를 짧고 공유하기 쉽게 만들어보세요." />
+        {/* 기본 정보 */}
+        <title>Linkedn Tips | 깔끔한 링크드인 URL 단축 서비스</title>
+        <meta name="description" content="복잡하고 긴 링크드인(LinkedIn) 게시물 주소를 공유하기 쉬운 짧은 URL로 변환하세요. 소셜 미디어 공유 시 깔끔한 미리보기를 제공합니다." />
+        <meta name="keywords" content="링크드인, URL 단축, 링크 줄이기, 소셜 미디어 공유, URL shortener, LinkedIn" />
+        <link rel="canonical" href="https://linkedntips.com" />
+
+        {/* 검색엔진 소유권 확인 (직접 발급받아 content에 입력해야 합니다) */}
+        <meta name="naver-site-verification" content="d9b8f1f0581f7751c9c98596397d0c3ce0293a98" />
+  
+        {/* 소셜 미디어 공유 (Open Graph & Twitter) */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Linkedn Tips | URL 단축 서비스" />
+        <meta property="og:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
+        <meta property="og:url" content="https://linkedntips.com" />
+        <meta property="og:image" content="https://linkedntips.com/og-image.png" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Linkedn Tips | URL 단축 서비스" />
+        <meta name="twitter:description" content="복잡한 링크드인 게시물 주소를 깔끔한 단축 URL로 만들어 공유해 보세요." />
+        <meta name="twitter:image" content="https://linkedntips.com/og-image.png" />
+
+        {/* 반응형 웹을 위한 뷰포트 설정 */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
         <style>
           {`
             html, body {
