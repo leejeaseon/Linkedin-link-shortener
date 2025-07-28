@@ -17,24 +17,32 @@ export default async function handler(request, response) {
 
     const multiGet = await kv.mget(...keys);
 
-    // ▼▼▼ 이번 주 월요일 0시 타임스탬프를 계산하는 로직 추가 ▼▼▼
+    // ▼▼▼ 한국 시간(KST) 기준으로 이번 주 월요일을 계산하도록 수정 ▼▼▼
     const now = new Date();
-    const dayOfWeek = now.getDay(); // 0(일요일) ~ 6(토요일)
-    const distanceToMonday = (dayOfWeek === 0) ? 6 : dayOfWeek - 1; // 월요일까지의 날짜 차이
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000); // UTC 시간으로 변환
+    const KST_OFFSET = 9 * 60 * 60 * 1000; // 한국은 UTC+9
+    const kstNow = new Date(utc + KST_OFFSET);
+
+    const dayOfWeek = kstNow.getDay(); // 0(일요일) ~ 6(토요일) in KST
+    const distanceToMonday = (dayOfWeek === 0) ? 6 : dayOfWeek - 1;
     
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - distanceToMonday);
-    startOfWeek.setHours(0, 0, 0, 0); // 월요일 0시 0분 0초
+    const startOfWeek = new Date(kstNow);
+    startOfWeek.setDate(kstNow.getDate() - distanceToMonday);
+    startOfWeek.setHours(0, 0, 0, 0);
     const startOfWeekTimestamp = startOfWeek.getTime();
-    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
     const sortedLinks = multiGet
       .map((linkData, index) => ({
         shortCode: keys[index],
         ...linkData,
       }))
-      // ▼▼▼ 이번 주에 생성된 링크만 필터링하는 조건 추가 ▼▼▼
-      .filter(item => typeof item.clicks === 'number' && item.createdAt >= startOfWeekTimestamp)
+      // ▼▼▼ 필터링 조건 2개 수정 및 추가 ▼▼▼
+      .filter(item => 
+        item.createdAt && // 1. createdAt 필드가 있는지 확인
+        item.createdAt >= startOfWeekTimestamp && // 2. 이번 주에 생성되었는지 확인
+        item.clicks > 0 // 3. 클릭 수가 0보다 큰지 확인
+      )
       .sort((a, b) => b.clicks - a.clicks);
 
     const top10 = sortedLinks.slice(0, 10);
