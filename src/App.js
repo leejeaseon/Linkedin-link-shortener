@@ -104,6 +104,7 @@ function App() {
         <title>Linkedn Tips | 깔끔한 링크드인 URL 단축 서비스</title>
         <meta name="description" content="복잡하고 긴 링크드인(LinkedIn) 게시물 주소를 공유하기 쉬운 짧은 URL로 변환하세요. 소셜 미디어 공유 시 깔끔한 미리보기를 제공합니다." />
         <meta name="keywords" content="링크드인, URL 단축, 링크 줄이기, 소셜 미디어 공유, URL shortener, LinkedIn" />
+        <meta name="theme-color" content="#8ec5fc" />  
         <link rel="canonical" href="https://linkedntips.com" />
 
         {/* 검색엔진 소유권 확인 (직접 발급받아 content에 입력해야 합니다) */}
