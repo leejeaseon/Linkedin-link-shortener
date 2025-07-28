@@ -297,7 +297,7 @@ function App() {
           )}
           
           <footer style={{ textAlign: 'center', marginTop: '40px', padding: '20px 0 0 0', color: '#777', fontSize: '12px', borderTop: '1px solid #eee' }}>
-            made by <a href="https://www.linkedin.com/in/homecorner-mkt/" target="_blank" rel="noopener noreferrer" style={{ color: '#0a66c2', textDecoration: 'none', fontWeight: 'bold' }}>집구석마케터</a>
+            Made by <a href="https://www.linkedin.com/in/homecorner-mkt/" target="_blank" rel="noopener noreferrer" style={{ color: '#0a66c2', textDecoration: 'none', fontWeight: 'bold' }}>집구석마케터</a>
           </footer>
         </div>
 
