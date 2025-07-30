@@ -304,7 +304,7 @@ function App() {
                       boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: '24px 32px',
                       width: '100%', maxWidth: '400px', boxSizing: 'border-box', flexShrink: 0 }}>
           <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#0a66c2', margin: '0 0 20px 0', paddingBottom: '12px', borderBottom: '1px solid #eee' }}>
-            오늘의 링띤 인싸 링크
+            오늘의 링띤 Top 10
           </h2>
           <ul className="leaderboard-list" style={{ listStyle: 'none', margin: 0, padding: 0, fontSize: '12px' }}>
             {topLinks.length > 0 ? (
