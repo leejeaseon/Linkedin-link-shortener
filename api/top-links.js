@@ -17,31 +17,30 @@ export default async function handler(request, response) {
 
     const multiGet = await kv.mget(...keys);
 
-    // ▼▼▼ 한국 시간(KST) 기준으로 이번 주 월요일을 계산하도록 수정 ▼▼▼
     const now = new Date();
-    const utc = now.getTime() + (now.getTimezoneOffset() * 60000); // UTC 시간으로 변환
-    const KST_OFFSET = 9 * 60 * 60 * 1000; // 한국은 UTC+9
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const KST_OFFSET = 9 * 60 * 60 * 1000;
     const kstNow = new Date(utc + KST_OFFSET);
 
-    const dayOfWeek = kstNow.getDay(); // 0(일요일) ~ 6(토요일) in KST
+    const dayOfWeek = kstNow.getDay();
     const distanceToMonday = (dayOfWeek === 0) ? 6 : dayOfWeek - 1;
     
     const startOfWeek = new Date(kstNow);
     startOfWeek.setDate(kstNow.getDate() - distanceToMonday);
     startOfWeek.setHours(0, 0, 0, 0);
     const startOfWeekTimestamp = startOfWeek.getTime();
-    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
     const sortedLinks = multiGet
       .map((linkData, index) => ({
         shortCode: keys[index],
         ...linkData,
       }))
-      // ▼▼▼ 필터링 조건 2개 수정 및 추가 ▼▼▼
       .filter(item => 
-        item.createdAt && // 1. createdAt 필드가 있는지 확인
-        item.createdAt >= startOfWeekTimestamp && // 2. 이번 주에 생성되었는지 확인
-        item.clicks > 0 // 3. 클릭 수가 0보다 큰지 확인
+        item.createdAt &&
+        item.createdAt >= startOfWeekTimestamp &&
+        item.clicks > 0 &&
+        // ▼▼▼ 원본 URL이 'linkedin.com'을 포함하는지 확인하는 조건 추가 ▼▼▼
+        item.url && item.url.includes('linkedin.com')
       )
       .sort((a, b) => b.clicks - a.clicks);
 
